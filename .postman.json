@@ -1,0 +1,1359 @@
+{
+  "workspaceId": "",
+  "collectionId": "",
+  "environmentId": "",
+  "collection": {
+    "info": {
+      "name": "SaaS Gestión Empresas API",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Health",
+        "item": [
+          {
+            "name": "Health Check",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/health",
+                "host": ["{{base_url}}"],
+                "path": ["health"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response has data', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('data');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Echo",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{\"message\": \"hello\"}"
+              },
+              "url": {
+                "raw": "{{base_url}}/health/echo",
+                "host": ["{{base_url}}"],
+                "path": ["health", "echo"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response echoes body', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json.data).to.have.property('body');",
+                    "  pm.expect(json.data.body.message).to.eql('hello');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Auth",
+        "item": [
+          {
+            "name": "Register - Valid",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{\"rut\": \"{{test_rut}}\", \"password\": \"{{test_password}}\", \"email\": \"{{test_email}}\", \"firstName\": \"{{test_first_name}}\", \"lastName\": \"{{test_last_name}}\"}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/auth/register",
+                "host": ["{{base_url}}"],
+                "path": ["api", "auth", "register"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+                    "pm.test('Response has message and accessToken', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "  pm.expect(json).to.have.property('accessToken');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Register - Missing Fields",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/auth/register",
+                "host": ["{{base_url}}"],
+                "path": ["api", "auth", "register"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                    "pm.test('Error message present', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Register - Duplicate RUT",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{\"rut\": \"{{test_rut}}\", \"password\": \"{{test_password}}\", \"email\": \"{{test_email}}\", \"firstName\": \"{{test_first_name}}\", \"lastName\": \"{{test_last_name}}\"}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/auth/register",
+                "host": ["{{base_url}}"],
+                "path": ["api", "auth", "register"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 409', () => pm.response.to.have.status(409));",
+                    "pm.test('Conflict message present', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Create Session - Valid (isLogin=true, cookies)",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{\"rut\": \"{{test_rut}}\", \"password\": \"{{test_password}}\", \"isLogin\": true}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/auth/session",
+                "host": ["{{base_url}}"],
+                "path": ["api", "auth", "session"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Cookies set for access and refresh tokens', () => {",
+                    "  const cookies = pm.response.headers.filter(h => h.key === 'Set-Cookie');",
+                    "  pm.expect(cookies.length).to.be.greaterThan(0);",
+                    "});",
+                    "pm.test('Response has verified and blocked', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('verified');",
+                    "  pm.expect(json).to.have.property('blocked');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Create Session - Valid (isLogin=false, token in body)",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{\"rut\": \"{{test_rut}}\", \"password\": \"{{test_password}}\", \"isLogin\": false}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/auth/session",
+                "host": ["{{base_url}}"],
+                "path": ["api", "auth", "session"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response has accessToken in body', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('accessToken');",
+                    "  pm.expect(json).to.have.property('verified');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Create Session - Missing Fields",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/auth/session",
+                "host": ["{{base_url}}"],
+                "path": ["api", "auth", "session"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                    "pm.test('Error message present', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Create Session - Invalid Credentials",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{\"rut\": \"11.111.111-1\", \"password\": \"wrong-password\", \"isLogin\": true}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/auth/session",
+                "host": ["{{base_url}}"],
+                "path": ["api", "auth", "session"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 401', () => pm.response.to.have.status(401));",
+                    "pm.test('Invalid credentials message', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json.message).to.eql('Credenciales inválidas');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Logout",
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/auth",
+                "host": ["{{base_url}}"],
+                "path": ["api", "auth"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response has message', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json.message).to.eql('Sesión cerrada');",
+                    "});",
+                    "pm.test('Cookies cleared', () => {",
+                    "  const cookies = pm.response.headers.filter(h => h.key === 'Set-Cookie');",
+                    "  pm.expect(cookies.length).to.be.greaterThan(0);",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Session",
+        "item": [
+          {
+            "name": "Get Session Data",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/session",
+                "host": ["{{base_url}}"],
+                "path": ["api", "session"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response has cliente and company', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('cliente');",
+                    "  pm.expect(json).to.have.property('company');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Select Company",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{\"id\": 1, \"favorite\": true}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/session/company",
+                "host": ["{{base_url}}"],
+                "path": ["api", "session", "company"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response has company object', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('company');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Select Company - Not Found",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{\"id\": 99999, \"favorite\": false}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/session/company",
+                "host": ["{{base_url}}"],
+                "path": ["api", "session", "company"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 404', () => pm.response.to.have.status(404));",
+                    "pm.test('Not found message', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Select Branch",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{\"id\": 1, \"favorite\": false}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/session/branch",
+                "host": ["{{base_url}}"],
+                "path": ["api", "session", "branch"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response has branch object', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('branch');",
+                    "});",
+                    "pm.test('Response has accessRule and pageTree', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('accessRule');",
+                    "  pm.expect(json).to.have.property('pageTree');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Select Branch - Not Found",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{\"id\": 99999, \"favorite\": false}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/session/branch",
+                "host": ["{{base_url}}"],
+                "path": ["api", "session", "branch"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 404', () => pm.response.to.have.status(404));",
+                    "pm.test('Not found message', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Refresh Token",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/session/refresh",
+                "host": ["{{base_url}}"],
+                "path": ["api", "session", "refresh"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response has message', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "  pm.expect(json.message).to.eql('Tokens renovados');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Refresh Token - No Cookie",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/session/refresh",
+                "host": ["{{base_url}}"],
+                "path": ["api", "session", "refresh"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 401', () => pm.response.to.have.status(401));",
+                    "pm.test('Unauthorized message', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Post Login",
+        "item": [
+          {
+            "name": "Post Login - Execute",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "url": {
+                "raw": "{{base_url}}/api/post-login",
+                "host": ["{{base_url}}"],
+                "path": ["api", "post-login"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response has companies array', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('companies');",
+                    "  pm.expect(json.companies).to.be.an('array');",
+                    "});",
+                    "pm.test('Cookies set for access and refresh tokens', () => {",
+                    "  const cookies = pm.response.headers.filter(h => h.key === 'Set-Cookie');",
+                    "  pm.expect(cookies.length).to.be.greaterThan(0);",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Post Login - Unauthorized (no session)",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/post-login",
+                "host": ["{{base_url}}"],
+                "path": ["api", "post-login"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 401 or 403', () => {",
+                    "  pm.expect(pm.response.code).to.be.oneOf([401, 403]);",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Access Control",
+        "item": [
+          {
+            "name": "Get Page Tree",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/access-control/pages/{{test_company_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["api", "access-control", "pages", "{{test_company_id}}"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response has pages array', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('pages');",
+                    "  pm.expect(json.pages).to.be.an('array');",
+                    "});",
+                    "pm.test('Response has accessRules array', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('accessRules');",
+                    "  pm.expect(json.accessRules).to.be.an('array');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Get Page Tree - Invalid Company ID",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/access-control/pages/invalid",
+                "host": ["{{base_url}}"],
+                "path": ["api", "access-control", "pages", "invalid"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                    "pm.test('Validation error for non-numeric param', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Get User Permissions",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/access-control/permissions/{{test_company_id}}",
+                "host": ["{{base_url}}"],
+                "path": ["api", "access-control", "permissions", "{{test_company_id}}"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response has permissions array', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('permissions');",
+                    "  pm.expect(json.permissions).to.be.an('array');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Get User Permissions - Invalid Company ID",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/access-control/permissions/invalid",
+                "host": ["{{base_url}}"],
+                "path": ["api", "access-control", "permissions", "invalid"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                    "pm.test('Validation error for non-numeric param', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Settings",
+        "item": [
+          {
+            "name": "Get Users With Profiles",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/settings/users",
+                "host": ["{{base_url}}"],
+                "path": ["api", "settings", "users"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response is an array', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.be.an('array');",
+                    "});",
+                    "pm.test('Each user has required fields', () => {",
+                    "  const json = pm.response.json();",
+                    "  if (json.length > 0) {",
+                    "    const user = json[0];",
+                    "    pm.expect(user).to.have.property('id');",
+                    "    pm.expect(user).to.have.property('name');",
+                    "    pm.expect(user).to.have.property('email');",
+                    "    pm.expect(user).to.have.property('rut');",
+                    "    pm.expect(user).to.have.property('profiles');",
+                    "    pm.expect(user).to.have.property('active');",
+                    "    pm.expect(user.profiles).to.be.an('array');",
+                    "  }",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Get Users - Unauthorized (no company session)",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/settings/users",
+                "host": ["{{base_url}}"],
+                "path": ["api", "settings", "users"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 401', () => pm.response.to.have.status(401));",
+                    "pm.test('Error message present', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Search Users - Valid Query",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/settings/users/search?q=juan",
+                "host": ["{{base_url}}"],
+                "path": ["api", "settings", "users", "search"],
+                "query": [{ "key": "q", "value": "juan" }]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response is an array', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.be.an('array');",
+                    "});",
+                    "pm.test('Each result has required fields', () => {",
+                    "  const json = pm.response.json();",
+                    "  if (json.length > 0) {",
+                    "    const user = json[0];",
+                    "    pm.expect(user).to.have.property('id');",
+                    "    pm.expect(user).to.have.property('firstName');",
+                    "    pm.expect(user).to.have.property('lastName');",
+                    "    pm.expect(user).to.have.property('rut');",
+                    "    pm.expect(user).to.have.property('email');",
+                    "  }",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Search Users - Empty Query",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/settings/users/search?q=",
+                "host": ["{{base_url}}"],
+                "path": ["api", "settings", "users", "search"],
+                "query": [{ "key": "q", "value": "" }]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                    "pm.test('Error message present', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Search Users - No Results",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/settings/users/search?q=zzzznoexiste",
+                "host": ["{{base_url}}"],
+                "path": ["api", "settings", "users", "search"],
+                "query": [{ "key": "q", "value": "zzzznoexiste" }]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response is an empty array', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.be.an('array');",
+                    "  pm.expect(json).to.have.lengthOf(0);",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Settings - Branches",
+        "item": [
+          {
+            "name": "List Branches",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/settings/branches",
+                "host": ["{{base_url}}"],
+                "path": ["api", "settings", "branches"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response is an array', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.be.an('array');",
+                    "});",
+                    "pm.test('Each branch has required fields', () => {",
+                    "  const json = pm.response.json();",
+                    "  if (json.length > 0) {",
+                    "    const branch = json[0];",
+                    "    pm.expect(branch).to.have.property('id');",
+                    "    pm.expect(branch).to.have.property('name');",
+                    "    pm.expect(branch).to.have.property('active');",
+                    "    pm.expect(branch).to.have.property('is_main');",
+                    "  }",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Create Branch",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{\"name\": \"Sucursal Test\", \"address\": \"Av. Principal 123\", \"phone\": \"+56912345678\"}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/settings/branches",
+                "host": ["{{base_url}}"],
+                "path": ["api", "settings", "branches"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+                    "pm.test('Response has message', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Create Branch - Missing Name",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/settings/branches",
+                "host": ["{{base_url}}"],
+                "path": ["api", "settings", "branches"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                    "pm.test('Validation error', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Update Branch",
+            "request": {
+              "method": "PUT",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{\"name\": \"Sucursal Actualizada\", \"address\": \"Av. Nueva 456\"}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/settings/branches/1",
+                "host": ["{{base_url}}"],
+                "path": ["api", "settings", "branches", "1"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response has message', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Set Main Branch",
+            "request": {
+              "method": "PUT",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/settings/branches/1/main",
+                "host": ["{{base_url}}"],
+                "path": ["api", "settings", "branches", "1", "main"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response has message', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Get Branch Users",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/settings/branches/1/users",
+                "host": ["{{base_url}}"],
+                "path": ["api", "settings", "branches", "1", "users"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response is an array', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.be.an('array');",
+                    "});",
+                    "pm.test('Each user has required fields', () => {",
+                    "  const json = pm.response.json();",
+                    "  if (json.length > 0) {",
+                    "    const user = json[0];",
+                    "    pm.expect(user).to.have.property('userId');",
+                    "    pm.expect(user).to.have.property('name');",
+                    "    pm.expect(user).to.have.property('active');",
+                    "    pm.expect(user).to.have.property('blocked');",
+                    "  }",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Add User to Branch",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/settings/branches/1/users/1",
+                "host": ["{{base_url}}"],
+                "path": ["api", "settings", "branches", "1", "users", "1"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+                    "pm.test('Response has message', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Update Branch User (block/unblock)",
+            "request": {
+              "method": "PUT",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{\"blocked\": true}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/settings/branches/1/users/1",
+                "host": ["{{base_url}}"],
+                "path": ["api", "settings", "branches", "1", "users", "1"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response has message', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Remove User from Branch",
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/settings/branches/1/users/1",
+                "host": ["{{base_url}}"],
+                "path": ["api", "settings", "branches", "1", "users", "1"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response has message', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Sales Company",
+        "item": [
+          {
+            "name": "Get Site Config",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/initium-saas/sales-company",
+                "host": ["{{base_url}}"],
+                "path": ["initium-saas", "sales-company"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200 or 401', () => {",
+                    "  pm.expect(pm.response.code).to.be.oneOf([200, 401]);",
+                    "});",
+                    "pm.test('Response has site config fields when 200', () => {",
+                    "  if (pm.response.code === 200) {",
+                    "    const json = pm.response.json();",
+                    "    if (json !== null) {",
+                    "      pm.expect(json).to.have.property('id');",
+                    "      pm.expect(json).to.have.property('nameSite');",
+                    "      pm.expect(json).to.have.property('enabled');",
+                    "    }",
+                    "  }",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Get Site Config - Unauthorized (no session)",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/initium-saas/sales-company",
+                "host": ["{{base_url}}"],
+                "path": ["initium-saas", "sales-company"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 401', () => pm.response.to.have.status(401));",
+                    "pm.test('Error message present', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Company",
+        "item": [
+          {
+            "name": "Get Company Types",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{base_url}}/api/company/type",
+                "host": ["{{base_url}}"],
+                "path": ["api", "company", "type"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Response has companies array', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('companies');",
+                    "  pm.expect(json.companies).to.be.an('array');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Create Company",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{\"name\": \"Clínica Test\", \"type\": 1, \"rut\": \"76.123.456-7\"}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/company",
+                "host": ["{{base_url}}"],
+                "path": ["api", "company"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                    "pm.test('Company created successfully', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.be.an('object');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Create Company - Missing Fields",
+            "request": {
+              "method": "POST",
+              "header": [{ "key": "Content-Type", "value": "application/json" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{}"
+              },
+              "url": {
+                "raw": "{{base_url}}/api/company",
+                "host": ["{{base_url}}"],
+                "path": ["api", "company"]
+              }
+            },
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "exec": [
+                    "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+                    "pm.test('Validation error message', () => {",
+                    "  const json = pm.response.json();",
+                    "  pm.expect(json).to.have.property('message');",
+                    "});"
+                  ],
+                  "type": "text/javascript"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "variable": [
+      { "key": "base_url", "value": "http://localhost:4000" },
+      { "key": "test_rut", "value": "12.345.678-5" },
+      { "key": "test_password", "value": "TestPass123!" },
+      { "key": "test_email", "value": "test@example.com" },
+      { "key": "test_first_name", "value": "Juan" },
+      { "key": "test_last_name", "value": "Pérez" },
+      { "key": "test_company_id", "value": "1" }
+    ]
+  }
+}

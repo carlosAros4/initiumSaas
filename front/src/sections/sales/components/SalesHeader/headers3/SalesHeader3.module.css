@@ -1,0 +1,608 @@
+/* ── Sales Header 3 — Sodimac/Homecenter Style ── */
+
+/* Promo bar superior */
+.promoBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  background: #1a1a1a;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  gap: 8px;
+}
+
+.promoBar span {
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+/* Main header */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  height: 64px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  gap: 20px;
+}
+
+.logoSection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.logoIcon {
+  width: 40px;
+  height: 40px;
+  background: #00843d;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+
+.logoText {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #1f2937;
+  line-height: 1.1;
+}
+
+.logoSubtext {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Categorías botón */
+.categoriesBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #00843d;
+  border: none;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.categoriesBtn:hover {
+  background: #006b31;
+}
+
+.categoriesBtn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Search bar */
+.searchWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  max-width: 560px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.searchWrapper:focus-within {
+  border-color: #00843d;
+}
+
+.searchInput {
+  flex: 1;
+  height: 40px;
+  border: none;
+  padding: 0 16px;
+  font-size: 0.88rem;
+  background: #fff;
+  color: #1f2937;
+  outline: none;
+}
+
+.searchInput::placeholder {
+  color: #9ca3af;
+}
+
+.searchBtn {
+  height: 40px;
+  width: 44px;
+  border: none;
+  background: #00843d;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.searchBtn:hover {
+  background: #006b31;
+}
+
+.searchBtn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Actions derecha */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.actionBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #374151;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: background 0.15s, color 0.15s;
+  font-family: var(--font-sans);
+  position: relative;
+}
+
+.actionBtn:hover {
+  background: #f3f4f6;
+  color: #00843d;
+}
+
+.actionBtn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.actionLabel {
+  font-size: 0.65rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.cartBadge {
+  position: absolute;
+  top: 2px;
+  right: 6px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Barra de navegación inferior */
+.navBar {
+  display: flex;
+  align-items: center;
+  padding: 0 32px;
+  height: 42px;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  gap: 4px;
+  overflow-x: auto;
+}
+
+.navLink {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #4b5563;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: var(--font-sans);
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+
+.navLink:hover {
+  background: #e5e7eb;
+  color: #1f2937;
+}
+
+.navLinkActive {
+  background: #dcfce7;
+  color: #00843d;
+  font-weight: 600;
+}
+
+/* ── Categories Modal ── */
+.categoriesModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 300;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+
+.categoriesModalOverlayOpen {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.categoriesModal {
+  position: fixed;
+  top: 96px;
+  left: 32px;
+  width: 320px;
+  max-height: 75vh;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  z-index: 301;
+  transform: translateY(-8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.25s, opacity 0.25s;
+  overflow: hidden;
+}
+
+.categoriesModalOpen {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.modalTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.modalCloseBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b7280;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalCloseBtn:hover {
+  color: #1f2937;
+  background: #e5e7eb;
+}
+
+.modalCloseBtn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.categoryList {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+  overflow-y: auto;
+  max-height: calc(75vh - 60px);
+}
+
+.categoryItem {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 20px;
+  font-size: 0.88rem;
+  color: #374151;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-family: var(--font-sans);
+}
+
+.categoryItem:hover {
+  background: #ecfdf5;
+  color: #00843d;
+}
+
+.categoryIcon {
+  width: 32px;
+  height: 32px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+/* ── Hamburguesa ── */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #1f2937;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+.hamburger:hover {
+  background: #f3f4f6;
+}
+
+.hamburger svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* ── Mobile Overlay ── */
+.mobileOverlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 400;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.mobileOverlayOpen {
+  display: block;
+  opacity: 1;
+}
+
+/* ── Mobile Menu ── */
+.mobileMenu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 320px;
+  max-width: 88vw;
+  height: 100%;
+  background: #ffffff;
+  z-index: 401;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.mobileMenuOpen {
+  transform: translateX(0);
+}
+
+.mobileMenuHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #00843d;
+}
+
+.mobileMenuLogo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mobileLogoIcon {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.mobileLogoText {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.mobileCloseBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobileCloseBtn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.mobileCloseBtn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.mobileSearch {
+  display: flex;
+  align-items: center;
+  margin: 16px 16px 8px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mobileSearchInput {
+  flex: 1;
+  height: 40px;
+  border: none;
+  padding: 0 12px;
+  font-size: 0.85rem;
+  outline: none;
+  background: #fff;
+}
+
+.mobileSearchBtn {
+  height: 40px;
+  width: 42px;
+  border: none;
+  background: #00843d;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobileSearchBtn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.mobileSection {
+  padding: 12px 0;
+}
+
+.mobileSectionTitle {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #9ca3af;
+  padding: 4px 20px 8px;
+}
+
+.mobileNavLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  font-size: 0.88rem;
+  color: #374151;
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-align: left;
+  width: 100%;
+  font-family: var(--font-sans);
+  transition: background 0.15s;
+}
+
+.mobileNavLink:hover {
+  background: #ecfdf5;
+  color: #00843d;
+}
+
+.mobileNavLink svg {
+  width: 18px;
+  height: 18px;
+  color: #00843d;
+  flex-shrink: 0;
+}
+
+.mobileDivider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 4px 16px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .header {
+    padding: 0 24px;
+    gap: 16px;
+  }
+
+  .navBar {
+    padding: 0 24px;
+  }
+
+  .actionLabel {
+    display: none;
+  }
+
+  .searchWrapper {
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .promoBar {
+    font-size: 0.68rem;
+    height: 28px;
+    padding: 0 16px;
+  }
+
+  .header {
+    padding: 0 16px;
+    height: 56px;
+    gap: 12px;
+  }
+
+  .categoriesBtn {
+    display: none;
+  }
+
+  .searchWrapper {
+    display: none;
+  }
+
+  .actions {
+    display: none;
+  }
+
+  .navBar {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+    align-items: center;
+  }
+}

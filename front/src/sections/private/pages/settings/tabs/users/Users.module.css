@@ -1,0 +1,69 @@
+.add {
+  margin-bottom: 20px;
+}
+
+/* User info cell */
+.userInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.userName {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+
+.userEmail {
+  font-size: 0.78rem;
+  color: #9ca3af;
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 99px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.badgeActive {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badgeInactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Profile tags */
+.profileTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.profileTag {
+  display: inline-block;
+  background: #ede9fe;
+  color: var(--color-primary, #6d28d9);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+/* Botón danger (eliminar) */
+.btnDanger {
+  color: #dc2626;
+  border-color: #dc2626;
+}
+
+.btnDanger:hover {
+  background: #fef2f2 !important;
+  border-color: #b91c1c;
+  color: #b91c1c;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.15);
+}

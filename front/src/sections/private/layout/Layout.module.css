@@ -1,0 +1,44 @@
+.layout {
+  display: grid;
+  height: 100dvh;
+  grid-template-areas:
+    "sidebar header"
+    "sidebar content";
+  grid-template-columns: 220px 1fr;
+  grid-template-rows: 56px 1fr;
+  overflow: hidden;
+}
+
+.content {
+  grid-area: content;
+  overflow-y: auto;
+  background: #f9fafb;
+  padding: 32px;
+}
+
+.overlay {
+  display: none;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .layout {
+    grid-template-areas:
+      "header"
+      "content";
+    grid-template-columns: 1fr;
+    grid-template-rows: 56px 1fr;
+  }
+
+  .content {
+    padding: 16px;
+  }
+
+  .overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 90;
+  }
+}

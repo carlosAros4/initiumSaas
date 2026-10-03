@@ -1,0 +1,36 @@
+.banner {
+  background: linear-gradient(135deg, var(--color-primary, #6d28d9) 0%, #4c1d95 100%);
+  border-radius: var(--radius-md, 12px);
+  padding: 2rem 2.5rem;
+  color: #fff;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  box-shadow: 0 4px 16px rgba(109, 40, 217, 0.15);
+}
+
+.bannerIcon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.bannerContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.bannerTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  font-family: var(--font-sans, system-ui, sans-serif);
+}
+
+.bannerSubtitle {
+  font-size: 1rem;
+  font-weight: 400;
+  margin: 0;
+  opacity: 0.85;
+}

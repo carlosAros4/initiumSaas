@@ -1,0 +1,122 @@
+/* ── Base ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: var(--radius-md);
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.1s, opacity 0.2s;
+  white-space: nowrap;
+  user-select: none;
+}
+.btn:active:not(.disabled) {
+  transform: translateY(1px);
+}
+
+/* ── Sizes ── */
+.sm {
+  padding: 0.4rem 1rem;
+  font-size: 0.8rem;
+}
+.md {
+  padding: 0.65rem 1.5rem;
+  font-size: 0.9rem;
+}
+.lg {
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+}
+
+/* ── Full width ── */
+.fullWidth {
+  width: 100%;
+}
+
+/* ── Variants ── */
+
+/* contained */
+.contained {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 8px var(--color-primary-shadow);
+}
+.contained:hover:not(.disabled) {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  box-shadow: 0 4px 16px var(--color-primary-shadow);
+  transform: translateY(-1px);
+}
+
+/* outlined */
+.outlined {
+  background: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+.outlined:hover:not(.disabled) {
+  background: var(--color-primary-light);
+  box-shadow: 0 2px 8px var(--color-primary-shadow);
+  transform: translateY(-1px);
+}
+
+/* text */
+.text {
+  background: transparent;
+  color: var(--color-primary);
+  border-color: transparent;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+.text:hover:not(.disabled) {
+  background: var(--color-primary-light);
+}
+
+/* ── Disabled ── */
+.disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+  border-color: #e5e7eb;
+  cursor: not-allowed;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+/* ── Icon ── */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1em;
+  line-height: 1;
+}
+
+
+/* ── Loading ── */
+.loading {
+  cursor: wait;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.spinner {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

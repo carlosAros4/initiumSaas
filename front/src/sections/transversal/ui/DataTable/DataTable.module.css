@@ -1,0 +1,405 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.tableWrapper {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+/* Headers */
+.headers {
+  display: flex;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.headers .cell,
+.headers .cellActions {
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  color: #6b7280;
+  letter-spacing: 0.03em;
+}
+
+/* Header cell with sort + filter */
+.headerCell {
+  display: flex;
+  align-items: center;
+      justify-content: flex-start;
+  gap: 0.25rem;
+}
+
+.headerLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  user-select: none;
+  transition: color 0.15s;
+}
+
+.headerLabel:hover {
+  color: var(--color-primary, #6d28d9);
+}
+
+/* Filter icon in each header */
+.filterIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #d1d5db;
+  padding: 2px;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+
+.filterIcon:hover {
+  color: var(--color-primary, #6d28d9);
+  background: #ede9fe;
+}
+
+.filterIconActive {
+  color: var(--color-primary, #6d28d9);
+}
+
+/* Sort icon */
+.sortIcon {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #d1d5db;
+  transition: color 0.15s;
+}
+
+.sortIconActive {
+  color: var(--color-primary, #6d28d9);
+}
+
+/* Mobile filter button — hidden on desktop */
+.mobileFilterBtn {
+  display: none;
+  margin-bottom: 0.75rem;
+}
+
+.mobileFilterBtnActive {
+  background: #ede9fe !important;
+  border-color: var(--color-primary, #6d28d9) !important;
+  color: var(--color-primary, #6d28d9) !important;
+}
+
+/* Rows */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.row:hover {
+  background: #faf5ff;
+}
+
+.rowSummary {
+  display: contents;
+}
+
+.rowDetails {
+  display: contents;
+}
+
+/* Expand icon — hidden on desktop */
+.expandIcon {
+  display: none;
+}
+
+.expandIconOpen {
+  transform: rotate(180deg);
+}
+
+/* Cells */
+.cell {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.cellActions {
+  flex: 1.5;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+/* Empty state */
+.emptyState {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+/* ===== Pagination ===== */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.5rem;
+  padding: 0.5rem 0;
+  font-size: 0.82rem;
+  color: #6b7280;
+  flex-wrap: wrap;
+}
+
+.paginationInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pageSizeSelect {
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.82rem;
+  color: #374151;
+  background: #fff;
+  cursor: pointer;
+  outline: none;
+}
+
+.pageSizeSelect:focus {
+  border-color: var(--color-primary, #6d28d9);
+}
+
+.paginationControls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.paginationText {
+  white-space: nowrap;
+}
+
+.paginationBtn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: #374151;
+  transition: all 0.15s;
+}
+
+.paginationBtn:hover:not(:disabled) {
+  background: #f3f4f6;
+  border-color: var(--color-primary, #6d28d9);
+  color: var(--color-primary, #6d28d9);
+}
+
+.paginationBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ===== Filter form (inside modal) ===== */
+.filterForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.filterField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.filterLabel {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.filterInput {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.875rem;
+  color: #1f2937;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.filterInput:focus {
+  border-color: var(--color-primary, #6d28d9);
+  box-shadow: 0 0 0 2px rgba(109, 40, 217, 0.08);
+}
+
+.filterActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/* ===== Responsive ===== */
+
+@media (max-width: 900px) {
+  .cellActions {
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .cell,
+  .cellActions {
+    padding: 0.6rem 0.65rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .mobileFilterBtn {
+    display: flex;
+  }
+
+  .tableWrapper {
+    border: none;
+    overflow-x: visible;
+  }
+
+  .headers {
+    display: none;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
+
+  .row:hover {
+    background: #fff;
+  }
+
+  .rowSummary {
+    display: flex;
+    align-items: center;
+    padding: 0.85rem;
+    cursor: pointer;
+    gap: 0.5rem;
+  }
+
+  .rowSummary .cell {
+    flex: 1;
+    padding: 0;
+    border-bottom: none;
+  }
+
+  .rowSummary .cell::before {
+    display: none;
+  }
+
+  .expandIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+  }
+
+  .rowDetails {
+    display: none;
+    flex-direction: column;
+    padding: 0 0.85rem 0.85rem;
+    border-top: 1px solid #f3f4f6;
+  }
+
+  .rowDetailsOpen {
+    display: flex;
+  }
+
+  .rowDetails .cell {
+    flex: unset;
+    padding: 0.4rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  .rowDetails .cell:last-child {
+    border-bottom: none;
+  }
+
+  .rowDetails .cell::before {
+    content: attr(data-label);
+    font-weight: 600;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    color: #6b7280;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+    min-width: 70px;
+  }
+
+  .rowDetails .cellActions {
+    flex: unset;
+    padding: 0.6rem 0 0 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    width: 100%;
+    border-top: 1px solid #f3f4f6;
+    margin-top: 0.35rem;
+    gap: 0.5rem;
+  }
+
+  .pagination {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 500px) {
+  .rowDetails .cellActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

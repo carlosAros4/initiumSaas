@@ -1,0 +1,14 @@
+.headers {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 80px;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.acciones {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}

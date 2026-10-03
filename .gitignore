@@ -1,0 +1,19 @@
+node_modules
+dist
+
+# Binarios de nginx (no versionar)
+nginx-1.28.3/
+
+# Archivos temporales
+_*.txt
+
+# Environment files (contienen secretos, nunca subir)
+.env
+.env.local
+.env.*.local
+backend/.env
+front/.env
+
+# Pero sí permitir las plantillas de ejemplo
+!.env.example
+!**/.env.example

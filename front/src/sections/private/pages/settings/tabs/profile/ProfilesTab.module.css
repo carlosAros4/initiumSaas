@@ -1,0 +1,355 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.btnPrimary {
+  background: var(--color-primary, #6d28d9);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.btnPrimary:hover {
+  opacity: 0.9;
+}
+
+/* Cards grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1.25rem;
+  background: #fff;
+  transition: box-shadow 0.15s;
+}
+
+.card:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.cardName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.cardBadge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 99px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: #ede9fe;
+  color: var(--color-primary, #6d28d9);
+}
+
+.cardDescription {
+  font-size: 0.82rem;
+  color: #6b7280;
+  margin: 0 0 0.85rem 0;
+  line-height: 1.4;
+}
+
+.cardPermissions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.permTag {
+  background: #f3f4f6;
+  color: #374151;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #f3f4f6;
+  padding-top: 0.75rem;
+}
+
+.cardUsers {
+  font-size: 0.78rem;
+  color: #9ca3af;
+}
+
+.cardActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btnSmall {
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  border-radius: 5px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  color: #374151;
+  transition: background 0.15s;
+}
+
+.btnSmall:hover {
+  background: #f3f4f6;
+}
+
+.btnDanger {
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+.btnDanger:hover {
+  background: #fef2f2;
+}
+
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.modalTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 1.25rem 0;
+  color: #1f2937;
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+.formGroup input,
+.formGroup textarea {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  color: #1f2937;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.formGroup textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: var(--color-primary, #6d28d9);
+  box-shadow: 0 0 0 2px rgba(109, 40, 217, 0.15);
+}
+
+.checkboxGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.4rem;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  color: #374151;
+  cursor: pointer;
+}
+
+.checkboxLabel input[type="checkbox"] {
+  width: auto;
+  accent-color: var(--color-primary, #6d28d9);
+}
+
+.modalActions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+.btnCancel {
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: #374151;
+}
+
+.btnCancel:hover {
+  background: #f3f4f6;
+}
+
+.fieldError {
+  display: block;
+  font-size: 0.75rem;
+  color: #dc2626;
+  margin-top: 0.25rem;
+}
+
+/* Rules tree */
+.rulesTree {
+  max-height: 280px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.emptyRules {
+  margin: 0;
+  padding: 0.75rem;
+  border: 1px dashed #e5e7eb;
+  border-radius: 8px;
+  color: #6b7280;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.ruleParent {
+  display: flex;
+  flex-direction: column;
+}
+
+.ruleParentRow {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.35rem 0;
+}
+
+.expandBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #6b7280;
+  padding: 0;
+  width: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expandBtn:hover {
+  color: var(--color-primary, #6d28d9);
+}
+
+.ruleCheckLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  font-size: 0.82rem;
+  color: #374151;
+}
+
+.ruleCheckLabel input[type="checkbox"] {
+  width: auto;
+  accent-color: var(--color-primary, #6d28d9);
+  cursor: pointer;
+}
+
+.ruleName {
+  user-select: none;
+}
+
+.ruleChildren {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-left: 2rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Delete confirmation */
+.deleteText {
+  font-size: 0.9rem;
+  color: #1f2937;
+  margin: 0 0 0.5rem 0;
+}
+
+.deleteWarning {
+  font-size: 0.8rem;
+  color: #dc2626;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.4;
+}
+
+.btnDangerFill {
+  background: #dc2626;
+}
+
+.btnDangerFill:hover {
+  opacity: 0.9;
+}

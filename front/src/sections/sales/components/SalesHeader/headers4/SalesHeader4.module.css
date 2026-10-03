@@ -1,0 +1,336 @@
+/* ── Sales Header 4 — Supabase Docs Style ── */
+
+/* Layout wrapper */
+.layout {
+  display: flex;
+  min-height: 100dvh;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 260px;
+  background: #1c1c1c;
+  border-right: 1px solid #2a2a2a;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 50;
+  overflow-y: auto;
+}
+
+.sidebarHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.sidebarLogoIcon {
+  width: 28px;
+  height: 28px;
+  background: #3ecf8e;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1c1c1c;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.sidebarLogoText {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ededed;
+}
+
+.sidebarBadge {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #3ecf8e;
+  background: rgba(62, 207, 142, 0.1);
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Sidebar nav */
+.sidebarNav {
+  flex: 1;
+  padding: 16px 0;
+  overflow-y: auto;
+}
+
+.sidebarSection {
+  margin-bottom: 8px;
+}
+
+.sidebarSectionTitle {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #6b7280;
+  padding: 8px 20px 6px;
+}
+
+.sidebarLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 20px;
+  font-size: 0.84rem;
+  color: #a3a3a3;
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-family: var(--font-sans);
+  transition: color 0.15s, background 0.15s;
+  border-left: 2px solid transparent;
+}
+
+.sidebarLink:hover {
+  color: #ededed;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.sidebarLinkActive {
+  color: #ededed;
+  background: rgba(62, 207, 142, 0.05);
+  border-left-color: #3ecf8e;
+}
+
+.sidebarLink svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+/* ── Top Header Bar ── */
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 56px;
+  background: #1c1c1c;
+  border-bottom: 1px solid #2a2a2a;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+/* Search */
+.searchWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #2a2a2a;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  padding: 0 14px;
+  height: 36px;
+  width: 320px;
+  cursor: text;
+  transition: border-color 0.2s;
+}
+
+.searchWrapper:focus-within {
+  border-color: #3ecf8e;
+}
+
+.searchIcon {
+  color: #6b7280;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.searchInput {
+  flex: 1;
+  border: none;
+  background: none;
+  color: #ededed;
+  font-size: 0.84rem;
+  outline: none;
+}
+
+.searchInput::placeholder {
+  color: #6b7280;
+}
+
+.searchShortcut {
+  font-size: 0.7rem;
+  color: #6b7280;
+  background: #1c1c1c;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #3a3a3a;
+  font-family: monospace;
+}
+
+/* Top actions */
+.topActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topLink {
+  font-size: 0.82rem;
+  color: #a3a3a3;
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: var(--font-sans);
+  transition: color 0.2s;
+  padding: 0;
+}
+
+.topLink:hover {
+  color: #ededed;
+}
+
+.signUpBtn {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1c1c1c;
+  background: #3ecf8e;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 14px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: background 0.2s;
+}
+
+.signUpBtn:hover {
+  background: #34b87a;
+}
+
+.topIconBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #a3a3a3;
+  padding: 6px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s, background 0.2s;
+}
+
+.topIconBtn:hover {
+  color: #ededed;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.topIconBtn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ── Main content area ── */
+.mainContent {
+  flex: 1;
+  background: #111111;
+  min-height: calc(100vh - 56px);
+}
+
+/* ── Hamburguesa (mobile) ── */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ededed;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+.hamburger:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.hamburger svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* ── Mobile sidebar overlay ── */
+.mobileOverlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 500;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.mobileOverlayOpen {
+  display: block;
+  opacity: 1;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 220px;
+  }
+
+  .topBar {
+    padding: 0 24px;
+  }
+
+  .searchWrapper {
+    width: 260px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 280px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 501;
+  }
+
+  .sidebarOpen {
+    transform: translateX(0);
+  }
+
+  .topBar {
+    padding: 0 16px;
+  }
+
+  .searchWrapper {
+    flex: 1;
+    width: auto;
+    max-width: 280px;
+  }
+
+  .searchShortcut {
+    display: none;
+  }
+
+  .topLink {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+    align-items: center;
+  }
+}

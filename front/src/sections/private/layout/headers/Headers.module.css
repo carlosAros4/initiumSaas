@@ -1,0 +1,119 @@
+.header {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 24px;
+  height: 56px;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.company {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.companyName {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+}
+
+.chevron {
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+/* Profile button */
+.profileBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: 1px solid #d1d5db;
+  border-radius: 50px;
+  cursor: pointer;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 4px 12px 4px 4px;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.profileBtn:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.profileBtn:active,
+.profileBtn.active {
+  background: #e5e7eb;
+  border-color: #6b7280;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #1f2937;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.userName {
+  white-space: nowrap;
+}
+
+/* Hamburguesa */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #374151;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+.hamburger:hover {
+  background: #f3f4f6;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .header {
+    padding: 0 16px;
+    gap: 12px;
+  }
+
+  .hamburger {
+    display: flex;
+    align-items: center;
+    order: 99;
+  }
+
+  .userName {
+    display: none;
+  }
+
+  .companyName {
+    max-width: 140px;
+    font-size: 0.8rem;
+  }
+}

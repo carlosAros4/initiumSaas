@@ -1,0 +1,315 @@
+.page {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+}
+
+.card {
+  width: 100%;
+  max-width: 540px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+}
+
+.cardIcon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.4rem 0;
+}
+
+.cardDesc {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0 0 2rem 0;
+  line-height: 1.5;
+}
+
+/* Toast */
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  background: #ecfdf5;
+  color: #065f46;
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  animation: slideDown 0.2s ease-out;
+}
+
+.toastError {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #991b1b;
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  animation: slideDown 0.2s ease-out;
+}
+
+.toastIcon {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Fields */
+.field {
+  margin-bottom: 1.5rem;
+}
+
+.fieldHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+.fieldLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.fieldHint {
+  font-size: 0.72rem;
+  color: #9ca3af;
+}
+
+.fieldInput {
+  width: 100%;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  color: #1f2937;
+  background: #fafafa;
+  box-sizing: border-box;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.fieldInput:focus {
+  outline: none;
+  border-color: var(--color-primary, #6d28d9);
+  background: #fff;
+}
+
+.fieldInput::placeholder {
+  color: #c4c9d4;
+}
+
+/* Edit slug button */
+.editSlugBtn {
+  border: none;
+  background: none;
+  font-size: 0.75rem;
+  color: var(--color-primary, #6d28d9);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.editSlugBtn:hover {
+  text-decoration: underline;
+}
+
+/* URL box */
+.urlBox {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fafafa;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.urlBox:focus-within {
+  border-color: var(--color-primary, #6d28d9);
+  background: #fff;
+}
+
+.urlBoxValid {
+  border-color: #a7f3d0;
+}
+
+.urlDomain {
+  padding: 0.75rem 0.6rem 0.75rem 1rem;
+  font-size: 0.85rem;
+  color: #9ca3af;
+  background: #f3f4f6;
+  border-right: 1px solid #e5e7eb;
+  white-space: nowrap;
+  user-select: none;
+  font-weight: 500;
+}
+
+.urlSlug {
+  flex: 1;
+  border: none;
+  padding: 0.75rem 0.75rem;
+  font-size: 0.95rem;
+  color: #1f2937;
+  background: transparent;
+  outline: none;
+  font-weight: 500;
+}
+
+.urlSlug::placeholder {
+  color: #c4c9d4;
+  font-weight: 400;
+}
+
+.urlOk {
+  padding: 0 1rem;
+  color: #10b981;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.urlError {
+  margin: 0.35rem 0 0 0;
+  font-size: 0.75rem;
+  color: #ef4444;
+}
+
+/* Toggle */
+.toggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+  margin-bottom: 1.5rem;
+  border-top: 1px solid #f3f4f6;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.toggleLabel {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.toggleDesc {
+  display: block;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.15rem;
+}
+
+.toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  border-radius: 999px;
+  border: none;
+  background: #d1d5db;
+  cursor: pointer;
+  transition: background 0.2s;
+  padding: 0;
+}
+
+.toggleOn {
+  background: var(--color-primary, #6d28d9);
+}
+
+.toggleThumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s;
+}
+
+.toggleOn .toggleThumb {
+  transform: translateX(20px);
+}
+
+/* Preview */
+.preview {
+  margin-bottom: 1.5rem;
+}
+
+.previewLabel {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.previewCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+  border: 1px solid #ddd6fe;
+}
+
+.previewName {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #4c1d95;
+}
+
+.previewUrl {
+  font-size: 0.8rem;
+  color: #7c3aed;
+  font-weight: 500;
+}
+
+/* Save button */
+.saveBtn {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 10px;
+  background: var(--color-primary, #6d28d9);
+  color: #fff;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.saveBtn:hover:not(:disabled) {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.saveBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.saveBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

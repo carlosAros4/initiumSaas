@@ -1,0 +1,306 @@
+/* ── Base ── */
+.home {
+  width: 100%;
+  max-width: 100%;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  color: #1a1a2e;
+  background: #fff;
+  overflow-x: hidden;
+}
+
+/* ── BUTTONS ── */
+.btnPrimary {
+  padding: 0.75rem 2rem;
+  background: #6d28d9;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+.btnPrimary:hover { background: #5b21b6; transform: translateY(-1px); }
+
+.btnGhost {
+  padding: 0.75rem 2rem;
+  background: transparent;
+  color: #6d28d9;
+  border: 1.5px solid #ddd6fe;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.2s;
+}
+.btnGhost:hover { border-color: #6d28d9; }
+
+/* ── HERO ── */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 6rem 5% 5rem;
+  background: linear-gradient(160deg, #f5f3ff 0%, #fff 60%);
+}
+.heroBadge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #6d28d9;
+  background: #ede9fe;
+  padding: 0.35rem 1rem;
+  border-radius: 999px;
+  margin-bottom: 1.5rem;
+}
+.heroTitle {
+  font-size: clamp(2.2rem, 5vw, 3.75rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: #0f0a1e;
+  margin: 0 0 1.25rem;
+}
+.heroSub {
+  font-size: 1.15rem;
+  color: #6b7280;
+  max-width: 520px;
+  line-height: 1.65;
+  margin-bottom: 2.5rem;
+}
+.heroStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 1.25rem 2.5rem;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 4px 24px rgba(109, 40, 217, 0.08);
+}
+.heroStatValue {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #6d28d9;
+  line-height: 1;
+}
+.heroStatLabel {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-top: 0.35rem;
+}
+.heroActions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ── SECTION LABELS ── */
+.sectionLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #6d28d9;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.sectionTitle {
+  font-size: clamp(1.6rem, 3vw, 2.25rem);
+  font-weight: 700;
+  color: #0f0a1e;
+  margin: 0 0 0.75rem;
+}
+.sectionSub {
+  color: #6b7280;
+  font-size: 1rem;
+  margin-bottom: 3rem;
+}
+
+/* ── CLIENTS MARQUEE ── */
+.clients {
+  padding: 3rem 5%;
+  text-align: center;
+  border-top: 1px solid #f3f4f6;
+  border-bottom: 1px solid #f3f4f6;
+  overflow: hidden;
+}
+.marqueeWrapper {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+.marqueeTrack {
+  display: flex;
+  gap: 3rem;
+  width: max-content;
+  animation: marquee 20s linear infinite;
+}
+.marqueeItem {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #9ca3af;
+  white-space: nowrap;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── FEATURES ── */
+.features {
+  padding: 5rem 5%;
+  text-align: center;
+  background: #fafafa;
+}
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.featureCard {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 2rem 1.75rem;
+  text-align: left;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.featureCard:hover {
+  box-shadow: 0 8px 32px rgba(109, 40, 217, 0.1);
+  transform: translateY(-3px);
+}
+.featureIcon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+.featureCard h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f0a1e;
+  margin: 0 0 0.5rem;
+}
+.featureCard p {
+  font-size: 0.9rem;
+  color: #6b7280;
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+.featureBadge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #6d28d9;
+  background: #ede9fe;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+}
+
+/* ── STATS BAR ── */
+.statsBar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  background: #6d28d9;
+  padding: 3rem 5%;
+}
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 3rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
+.statItem:last-child { border-right: none; }
+.statValue {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+.statLabel {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.75);
+  margin-top: 0.4rem;
+  text-align: center;
+  max-width: 160px;
+}
+
+/* ── CTA ── */
+.cta {
+  padding: 6rem 5%;
+  text-align: center;
+  background: linear-gradient(160deg, #f5f3ff 0%, #fff 100%);
+}
+.cta h2 {
+  font-size: clamp(1.6rem, 3vw, 2.25rem);
+  font-weight: 700;
+  color: #0f0a1e;
+  margin: 0 0 1rem;
+}
+.cta p {
+  color: #6b7280;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* ── FOOTER ── */
+.footer {
+  padding: 1.5rem 5%;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #9ca3af;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .statItem {
+    padding: 1rem 1.5rem;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    width: 100%;
+  }
+  .statItem:last-child { border-bottom: none; }
+}
+
+/* ── BUTTON SHOWCASE ── */
+.showcase {
+  margin-top: 3rem;
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  text-align: left;
+}
+
+.showcaseLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: 0.5rem 0 0.25rem;
+}
+.showcaseLabel:first-child {
+  margin-top: 0;
+}
+
+.showcaseRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
