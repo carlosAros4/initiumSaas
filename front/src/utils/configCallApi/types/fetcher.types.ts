@@ -4,6 +4,14 @@ export interface FetcherOptions {
     headers?: Record<string, string>;
     withCredentials?: boolean;
     skipEncrypt?: boolean;
+    /** true para descargas de archivos binarios (PDF, Excel, etc.) */
+    document?: boolean;
+}
+
+/** Resultado de una respuesta binaria. El fileName se obtiene del header Content-Disposition. */
+export interface BlobResponse {
+    blob: Blob;
+    fileName: string | null;
 }
 
 export type HeadersForCrypto = { 

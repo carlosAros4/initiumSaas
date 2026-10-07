@@ -38,7 +38,7 @@ export class BffServer {
         'x-span-id',
         'application',
       ],
-      exposedHeaders: ['Content-Type', 'Content-Length'],
+      exposedHeaders: ['Content-Type', 'Content-Length', 'Content-Disposition'],
       credentials: true,
       preflightContinue: false,
       optionsSuccessStatus: 204,

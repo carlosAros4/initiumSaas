@@ -18,6 +18,7 @@ const componentRegistry: Record<string, React.LazyExoticComponent<ComponentType>
   access: lazy(() => import('../pages/settings/Settings')),
   branches: lazy(() => import('../pages/settings/module/branches/Branches')),
   globalAccess: lazy(() => import('../pages/settings/module/globalAccess/GlobalAccess')),
-  prescriptionConfig: lazy(() => import('../pages/settings/module/prescription/Prescription'))
+  prescriptionConfig: lazy(() => import('../pages/settings/module/prescription/Prescription')),
+  documentTemplatesTest: lazy(() => import('../pages/settings/module/documentTemplates/TestDocumentTemplates'))
 };
 export default componentRegistry;

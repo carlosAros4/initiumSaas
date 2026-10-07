@@ -2,6 +2,7 @@ import { CallApiContext, type CallApiParams, type ClientType } from "./CallApiCo
 
 import { v4 as uuidv4 } from 'uuid';
 import { createClient } from "../../utils/configCallApi/create-client";
+import type { BlobResponse } from "../../utils/configCallApi/types/fetcher.types";
 
 export interface Props {
   children: React.ReactNode;
@@ -94,10 +95,31 @@ export const CallApiContextProvider = ({ children }: Props) => {
     return client.useFetch<T>(path, { method, body, headers: headerFull, skipEncrypt });
   };
 
-  const fetcher = <T = unknown>({ path, method, body, headers, clientType, skipEncrypt, token }: CallApiParams) => {
+  const fetcher = async <T = unknown>({ path, method, body, headers, clientType, skipEncrypt, token, document, fileName }: CallApiParams): Promise<T> => {
     const client = getClient(clientType);
     const hea = getDynamicHeaders(clientType, token);
     const headerFull = buildHeaders(headers, hea);
+
+    // Descarga de documentos (PDF, Excel, etc.): el provider dispara la descarga del archivo.
+    if (document) {
+      const { blob, fileName: serverFileName } = await client.fetcher<BlobResponse>(
+        path,
+        { method, body, headers: headerFull, skipEncrypt, document: true },
+      );
+
+      const url = URL.createObjectURL(blob);
+      const link = window.document.createElement('a');
+      link.href = url;
+
+      link.download = fileName ?? serverFileName ?? 'documento';
+      window.document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+
+      return blob as T;
+    }
+
     return client.fetcher<T>(path, { method, body, headers: headerFull, skipEncrypt });
   };
 

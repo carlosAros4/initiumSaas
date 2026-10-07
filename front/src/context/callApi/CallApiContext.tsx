@@ -18,6 +18,10 @@ export interface CallApiParams {
   skipEncrypt?: boolean;
   clientType: ClientType;
   token?:string;
+  /** true para descargas de archivos binarios (PDF, Excel, etc.) */
+  document?: boolean;
+  /** Nombre del archivo al descargar (solo aplica con document: true). */
+  fileName?: string;
 }
 
 export interface ICallApiContext {

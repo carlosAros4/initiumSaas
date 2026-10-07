@@ -131,6 +131,32 @@ CREATE TABLE "__SCHEMA__".user_global_access (
 );
 
 -- =========================================
+-- TABLE: document_template (plantillas de documentos)
+-- type    = 'pdf' | 'excel'
+-- content = plantilla Handlebars (.hbs) para PDF  (NULL si es excel)
+-- file    = archivo .xlsx base para Excel          (NULL si es pdf)
+-- code    = identificador lógico único para buscar la plantilla
+-- =========================================
+CREATE TABLE "__SCHEMA__".document_template (
+    id          SERIAL PRIMARY KEY,
+    code        VARCHAR(100) NOT NULL,
+    description VARCHAR(255),
+    type        VARCHAR(10) NOT NULL DEFAULT 'pdf',
+    content     TEXT,
+    file        BYTEA,
+    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
+
+    CONSTRAINT uq_document_template_code UNIQUE (code),
+    CONSTRAINT chk_document_template_type CHECK (type IN ('pdf', 'excel')),
+    -- pdf exige content; excel exige file
+    CONSTRAINT chk_document_template_payload CHECK (
+        (type = 'pdf'   AND content IS NOT NULL) OR
+        (type = 'excel' AND file    IS NOT NULL)
+    )
+);
+
+-- =========================================
 -- INSERTS INICIALES
 -- =========================================
 

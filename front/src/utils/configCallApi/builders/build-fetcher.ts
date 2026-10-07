@@ -1,5 +1,15 @@
 
-import { FetcherError, type FetcherOptions, type HeadersForCrypto } from "../types/fetcher.types";
+import { FetcherError, type BlobResponse, type FetcherOptions, type HeadersForCrypto } from "../types/fetcher.types";
+
+/** Extrae el nombre del archivo desde el header Content-Disposition. */
+function parseFileName(contentDisposition: string | null): string | null {
+  if (!contentDisposition) return null;
+  // Soporta filename="x.pdf" y filename*=UTF-8''x.pdf
+  const utf8Match = contentDisposition.match(/filename\*=UTF-8''([^;]+)/i);
+  if (utf8Match?.[1]) return decodeURIComponent(utf8Match[1]);
+  const match = contentDisposition.match(/filename="?([^"\n;]+)"?/i);
+  return match?.[1] ?? null;
+}
 import type { AnyClientConfig } from "../types/client-config.types";
 import { decryptResponse, encryptRequest } from "../types/decrypt";
 
@@ -29,6 +39,7 @@ export function buildFetcher(config: AnyClientConfig) {
       headers = {},
       withCredentials = baseWithCredentials,
       skipEncrypt = false,
+      document = false,
     } = options;
 
     const mergedHeaders: Record<string, string> = { ...baseHeaders, ...headers };
@@ -57,6 +68,17 @@ export function buildFetcher(config: AnyClientConfig) {
     }).catch((err) => {
       throw new FetcherError(err instanceof Error ? err.message : String(err), 0, null);
     });
+
+    // Respuesta binaria (descarga de archivos: PDF, Excel, etc.)
+    if (document) {
+      if (!res.ok) {
+        const errText = await res.text().catch(() => null);
+        throw new FetcherError<T>(`HTTP ${res.status}: ${res.statusText}`, res.status, errText as T);
+      }
+      const blob = await res.blob();
+      const fileName = parseFileName(res.headers.get('content-disposition'));
+      return { blob, fileName } as BlobResponse as T;
+    }
 
     const isEncrypted = res.headers.get('content-type')?.includes('application/octet-stream');
 
