@@ -13,7 +13,7 @@ import { BranchesService } from './service/branches.service';
 import { GlobalAccessService } from './service/global-access.service';
 import { PrescriptionService } from './service/prescription.service';
 import { DocumentTemplateService } from './service/document-template.service';
-import { DocumentGenerator } from '../../core/utils/DocumentGenerator';
+import { DocumentGenerator } from '../../core/utils/document/DocumentGenerator';
 
 import { UsersRepositoryImpl } from './implements/users.repository.impl';
 import { ProfilesRepositoryImpl } from './implements/profiles.repository.impl';

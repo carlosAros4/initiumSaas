@@ -2,11 +2,10 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from './sections/public/home/HomePage';
 import { useAuth } from './context/login/AuthContext';
 import { SessionProvider } from './context/session/SessionContextProvider';
-import { useSession } from './context/session/SessionContext';
-import { useCallApi } from './hooks/useCallApi';
 import Transition from './transition';
-import Sales from './sections/sales/Sales';
+
 import NotFound from './sections/public/notFound/NotFound';
+import { useSession } from './hooks/useSession';
 
 interface SiteNameItem {
   nameSite: string;

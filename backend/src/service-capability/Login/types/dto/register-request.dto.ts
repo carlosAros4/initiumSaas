@@ -1,5 +1,5 @@
 import { ApiPropertyOptional, ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsIn, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class RegisterRequestDto {
@@ -23,5 +23,11 @@ export class RegisterRequestDto {
   @ApiProperty()
   @IsString()
   lastName: string;
+
+  @ApiProperty({ enum: ['M', 'F'], description: 'Género: M (hombre) | F (mujer)' })
+  @IsString()
+  @IsNotEmpty()
+  @IsIn(['M', 'F'])
+  gender: string;
 
 }

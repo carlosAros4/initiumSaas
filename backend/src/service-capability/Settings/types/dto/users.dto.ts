@@ -24,6 +24,7 @@ export interface CreateUserDto {
   lastName: string;
   rut: string;
   email: string;
+  gender: string;
 }
 
 export interface AddUserResponse {

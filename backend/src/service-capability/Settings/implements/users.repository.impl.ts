@@ -227,6 +227,7 @@ export class UsersRepositoryImpl implements IUsersRepository {
     rut: string,
     dv: string,
     email: string,
+    gender: string,
     branchId: number | null,
   ): Promise<void> {
     this.logger.log(`[createUserAndAddToCompany] ${firstName} ${lastName} (${rut}-${dv}), tenant: ${tenant}, branchId: ${branchId}`);
@@ -236,10 +237,10 @@ export class UsersRepositoryImpl implements IUsersRepository {
       await client.query('BEGIN');
       const hashedPassword = await bcrypt.hash(rut, 10);
       const insertResult = await client.query<{ id: number }>(
-        `INSERT INTO "CONFIG_MAIN".users (first_name, last_name, rut, dv, email, password, "newusers")
-         VALUES ($1, $2, $3, $4, $5, $6, $7)
+        `INSERT INTO "CONFIG_MAIN".users (first_name, last_name, rut, dv, email, gender, password, "newusers")
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
          RETURNING id`,
-        [firstName, lastName, rut, dv, email, hashedPassword, true],
+        [firstName, lastName, rut, dv, email, gender, hashedPassword, true],
       );
 
       const newUserId = insertResult.rows[0].id;

@@ -1,6 +1,6 @@
 import s from './Alert.module.css';
 
-type AlertVariant = 'info' | 'warning' | 'error' | 'success';
+export type AlertVariant = 'info' | 'warning' | 'error' | 'success';
 
 interface AlertProps {
   variant?: AlertVariant;

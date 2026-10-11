@@ -8,5 +8,5 @@ export interface IUsersRepository {
   addUserToCompany(tenant: string, userId: number, branchId: number | null): Promise<void>;
   findUserByRut(rut: string, dv: string): Promise<UserSearchResult | null>;
   isUserInCompany(userId: number, tenant: string): Promise<boolean>;
-  createUserAndAddToCompany(tenant: string, firstName: string, lastName: string, rut: string, dv: string, email: string, branchId: number | null): Promise<void>;
+  createUserAndAddToCompany(tenant: string, firstName: string, lastName: string, rut: string, dv: string, email: string, gender: string, branchId: number | null): Promise<void>;
 }

@@ -71,6 +71,7 @@ export class LoginService {
       data.firstName,
       data.lastName,
       data.email,
+      data.gender,
     );
 
     if (!userId) {

@@ -141,19 +141,14 @@ CREATE TABLE "__SCHEMA__".document_template (
     id          SERIAL PRIMARY KEY,
     code        VARCHAR(100) NOT NULL,
     description VARCHAR(255),
-    type        VARCHAR(10) NOT NULL DEFAULT 'pdf',
+    type        VARCHAR(10) NOT NULL,
+    paperformat varchar(100) NOT NULL,
     content     TEXT,
     file        BYTEA,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at  TIMESTAMP NOT NULL DEFAULT NOW(),
 
-    CONSTRAINT uq_document_template_code UNIQUE (code),
-    CONSTRAINT chk_document_template_type CHECK (type IN ('pdf', 'excel')),
-    -- pdf exige content; excel exige file
-    CONSTRAINT chk_document_template_payload CHECK (
-        (type = 'pdf'   AND content IS NOT NULL) OR
-        (type = 'excel' AND file    IS NOT NULL)
-    )
+    CONSTRAINT uq_document_template_code UNIQUE (code)
 );
 
 -- =========================================

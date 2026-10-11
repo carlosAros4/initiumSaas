@@ -54,6 +54,11 @@ export class RegisterService {
     this.logger.log(`[createCompany] Iniciar creacion de tablas en schema: ${tenant_id}`);
     await this.repository.insertTablescompany(tenant_id);
 
+    //variante de insert cuando sea de tipo veterinaria la empresa.
+    if(data.type===2){
+       this.logger.log(`[createCompany] Iniciar insert para veterinaria ${tenant_id}`);
+       await this.repository.insertCompanyVeterinaria(tenant_id);
+    }
     this.logger.log(`[createCompany] Asociar company y usuario creador`);
     await this.repository.asignarCompany(tenant_id, data);
 

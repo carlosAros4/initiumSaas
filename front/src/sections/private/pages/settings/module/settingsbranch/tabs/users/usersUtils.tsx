@@ -1,4 +1,4 @@
-import type { ColumnDef } from "../../../../../transversal/ui/DataTable"
+import type { ColumnDef } from "../../../../../../../transversal/ui/DataTable"
 
 
 export interface UserRow {

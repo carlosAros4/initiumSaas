@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useAuth } from "./context/login/AuthContext";
-import { useSession } from "./context/session/SessionContext";
 import { useCallApi } from "./hooks/useCallApi";
 import type { Branch, Company, SelectBranchResponse, SelectCompanyResponse, SessionResponse } from "./types/session";
 
@@ -9,6 +8,7 @@ import { pageFilter } from "./utils/pageFilter";
 import Spinner from "./sections/transversal/ui/Spinner/Spinner";
 import { SelectCompanyModal } from "./sections/private/layout/utilitatios/SelectCompanyModal/SelectCompanyModal";
 import { SelectBranchModal } from "./sections/private/layout/utilitatios/SelectBranchModal/SelectBranchModal";
+import { useSession } from "./hooks/useSession";
 
 
 export const Transition = () => {

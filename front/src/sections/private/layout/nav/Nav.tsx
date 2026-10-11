@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { useSession } from '../../../../context/session/SessionContext'
 import { slugify } from '../../../../utils/slugify'
 import type { PageTree } from '../../../../types/page-tree'
 import style from './Nav.module.css'
+import { useSession } from '../../../../hooks/useSession'
 
 const IconChevron = ({ open }: { open: boolean }) => (
   <svg

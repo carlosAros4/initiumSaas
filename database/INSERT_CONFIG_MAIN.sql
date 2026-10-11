@@ -87,13 +87,12 @@ INSERT INTO "CONFIG_MAIN".access_rule (access_key, description, parent_rule_id) 
     ('settings', 'Acceso seccion Configuracion', null);
 
 INSERT INTO "CONFIG_MAIN".page (slug, module, name, url, type_id, parent_id, access_id, scope_type, "order", active) VALUES
-    ( 'settings','settings','configuraciones','settings',
+    ( 'settings','','configuraciones','',
     (SELECT id FROM "CONFIG_MAIN".page_type WHERE name = 'label'),
     (SELECT id FROM "CONFIG_MAIN".page WHERE slug = 'menu-principal'),
     (SELECT id FROM "CONFIG_MAIN".access_rule WHERE access_key = 'settings'),
     'branch',900,true);
 
-       
         -- =====================================================================
         -- NIVEL 2 — [SETTINGS.ACCESS] [sucursal]
         -- El árbol de accesos se arma en el backend a partir de la jerarquía
@@ -132,22 +131,33 @@ INSERT INTO "CONFIG_MAIN".page (slug, module, name, url, type_id, parent_id, acc
             (SELECT id FROM "CONFIG_MAIN".access_rule WHERE access_key = 'branches'),
             'global',700,true);
 
-
         -- =====================================================================
-        -- NIVEL 2 — [recetas] [global]
+        -- NIVEL 2 — [Documentos Digitales] [global]
         -- =====================================================================
 
-            -- access_rules de la página branches (padre + hijas)
-            INSERT INTO "CONFIG_MAIN".access_rule (access_key, description, parent_rule_id) VALUES
-                ('prescription', 'Gestion de Receta Digital', null);
+        -- access_rules de la página branches (padre + hijas)
+        INSERT INTO "CONFIG_MAIN".access_rule (access_key, description, parent_rule_id) VALUES
+            ('documentDigital', 'gestion de documentos digitales', null);
 
-            INSERT INTO "CONFIG_MAIN".page (slug, module, name, url, type_id, parent_id, access_id, scope_type, "order", active) VALUES
-                ( 'prescription','prescriptionConfig','Receta Digital','digital-prescription',
-                (SELECT id FROM "CONFIG_MAIN".page_type WHERE name = 'module'),
-                (SELECT id FROM "CONFIG_MAIN".page WHERE slug = 'settings'),
-                (SELECT id FROM "CONFIG_MAIN".access_rule WHERE access_key = 'prescription'),
-                'global',500,true);
+        INSERT INTO "CONFIG_MAIN".page (slug, module, name, url, type_id, parent_id, access_id, scope_type, "order", active) VALUES
+            ( 'digital.docs','','Documentos Digitales','',
+            (SELECT id FROM "CONFIG_MAIN".page_type WHERE name = 'module'),
+            (SELECT id FROM "CONFIG_MAIN".page WHERE slug = 'settings'),
+            (SELECT id FROM "CONFIG_MAIN".access_rule WHERE access_key = 'documentDigital'),
+            'global',400,true);
+                -- =====================================================================
+                -- NIVEL 3 — [recetas] [global]
+                -- =====================================================================
+                -- access_rules de la página branches (padre + hijas)
+                INSERT INTO "CONFIG_MAIN".access_rule (access_key, description, parent_rule_id) VALUES
+                    ('prescription', 'Gestion de Receta Digital', null);
 
+                INSERT INTO "CONFIG_MAIN".page (slug, module, name, url, type_id, parent_id, access_id, scope_type, "order", active) VALUES
+                    ( 'prescription','prescriptionConfig','Receta Digital','digital-prescription',
+                    (SELECT id FROM "CONFIG_MAIN".page_type WHERE name = 'module'),
+                    (SELECT id FROM "CONFIG_MAIN".page WHERE slug = 'settings'),
+                    (SELECT id FROM "CONFIG_MAIN".access_rule WHERE access_key = 'prescription'),
+                    'global',100,true);
 
          -- =====================================================================
         -- NIVEL 2 — [accesos Globales] [global]

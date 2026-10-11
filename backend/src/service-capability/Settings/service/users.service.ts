@@ -57,6 +57,10 @@ export class UsersService {
       throw new BadRequestException('El RUT ingresado no es válido.');
     }
 
+    if (dto.gender !== 'M' && dto.gender !== 'F') {
+      throw new BadRequestException('El género es inválido. Debe ser M (hombre) o F (mujer).');
+    }
+
     const existingUser = await this.repository.findUserByRut(rut, dv);
     if (existingUser) {
       const alreadyInCompany = await this.repository.isUserInCompany(existingUser.id, tenant);
@@ -84,7 +88,7 @@ export class UsersService {
     }
 
     try {
-      await this.repository.createUserAndAddToCompany(tenant, dto.firstName, dto.lastName, rut, dv, dto.email, branchId);
+      await this.repository.createUserAndAddToCompany(tenant, dto.firstName, dto.lastName, rut, dv, dto.email, dto.gender, branchId);
     } catch (error: any) {
       if (error?.code === '23505') {
         throw new ConflictException('El RUT o email ya existe en el sistema');

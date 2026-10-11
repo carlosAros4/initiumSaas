@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import s from './SiteTab.module.css';
-import { useSession } from '../../../../../../context/session/SessionContext';
 import { useCallApi } from '../../../../../../hooks/useCallApi';
 import Spinner from '../../../../../transversal/ui/Spinner/Spinner';
+import { useSession } from '../../../../../../hooks/useSession';
 
 const PUBLIC_DOMAIN = 'initium.cl/Public/';
 

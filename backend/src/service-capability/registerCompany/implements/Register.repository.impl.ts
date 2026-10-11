@@ -7,6 +7,7 @@ import { companiesResult } from '../types/dto/companys';
 import { INIT_COMPANY_SQL } from '../utils/initCompany';
 import { CreateCompanyRequestDto } from '../types/dto/create-company-request.dto';
 import { USER_SESSION, UserSession } from 'src/core/providers/user-session';
+import { INIT_VETERINARIA_SQL } from '../utils/typeVeretinaria';
 
 @Injectable()
 export class RegisterImpl implements IRegister {
@@ -76,23 +77,43 @@ export class RegisterImpl implements IRegister {
   }
 
   async insertTablescompany(tenant_id: string): Promise<boolean> {
-    this.logger.log(`[insertTablescompany] Creando tablas — schema: ${tenant_id}`);
+    this.logger.log(`[insertTablescompany] inicio de insert - schema: ${tenant_id}`);
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
       const sql = INIT_COMPANY_SQL.replaceAll('__SCHEMA__', tenant_id);
       await client.query(sql);
       await client.query('COMMIT');
-      this.logger.log(`[insertTablescompany] Tablas creadas exitosamente — schema: ${tenant_id}`);
+      this.logger.log(`[insertTablescompany] insert exitoso — schema: ${tenant_id}`);
       return true;
     } catch (error) {
       await client.query('ROLLBACK');
-      this.logger.error(`[insertTablescompany] Error al crear tablas — schema: ${tenant_id}`, error);
+      this.logger.error(`[insertTablescompany] Error cargar datos ${tenant_id}`, error);
       throw error;
     } finally {
       client.release();
     }
   }
+  
+  async insertCompanyVeterinaria(tenant_id: string): Promise<boolean> {
+    this.logger.log(`[insertCompanyVeterinaria] inicio de insert — schema: ${tenant_id}`);
+    const client = await this.pool.connect();
+    try {
+      await client.query('BEGIN');
+      const sql = INIT_VETERINARIA_SQL.replaceAll('__SCHEMA__', tenant_id);
+      await client.query(sql);
+      await client.query('COMMIT');
+      this.logger.log(`[insertCompanyVeterinaria] insert exitoso — schema: ${tenant_id}`);
+      return true;
+    } catch (error) {
+      await client.query('ROLLBACK');
+      this.logger.error(`[insertCompanyVeterinaria] Error cargar datos — schema: ${tenant_id}`, error);
+      throw error;
+    } finally {
+      client.release();
+    }
+  }
+  
 
   async createSchema(tenant_id: string): Promise<boolean> {
     this.logger.log(`[createSchema] Creando schema: ${tenant_id}`);

@@ -1,8 +1,8 @@
 import ButtonInitium from '../../../transversal/ui/Button/ButtonInitium';
 import { useAuth } from '../../../../context/login/AuthContext'
-import { useSession } from '../../../../context/session/SessionContext';
 import style from './ProfileModal.module.css'
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useSession } from '../../../../hooks/useSession';
 const ProfileModal = () => {
   const { logout } = useAuth()
   const {cliente } = useSession()

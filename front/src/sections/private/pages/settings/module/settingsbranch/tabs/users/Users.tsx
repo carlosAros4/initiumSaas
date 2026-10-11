@@ -1,20 +1,22 @@
 import { useState } from 'react'
 import AddIcon from '@mui/icons-material/Add'
 import style from './Users.module.css'
-import { useCallApi } from '../../../../../../hooks/useCallApi'
+import { useCallApi } from '../../../../../../../../hooks/useCallApi'
 import { columnas, type UserRow } from './usersUtils'
 import AddUser from './addUser/AddUser'
 import AssignProfile from './assignProfile/AssignProfile'
-import Spinner from '../../../../../transversal/ui/Spinner/Spinner'
-import ServiceError from '../../../../../transversal/ui/ServiceError/ServiceError'
-import ButtonInitium from '../../../../../transversal/ui/Button/ButtonInitium'
-import { DataTable } from '../../../../../transversal/ui/DataTable'
-import CenterModal from '../../../../../transversal/modal/central/CenterModal'
+import Spinner from '../../../../../../../transversal/ui/Spinner/Spinner'
+import ServiceError from '../../../../../../../transversal/ui/ServiceError/ServiceError'
+import ButtonInitium from '../../../../../../../transversal/ui/Button/ButtonInitium'
+import { DataTable } from '../../../../../../../transversal/ui/DataTable'
+import CenterModal from '../../../../../../../transversal/modal/central/CenterModal'
+import AlertInitium from '../../../../../../../transversal/ui/Alert/Alert'
 
 type Modal = 'addUser' | 'deleteUser' | 'assingProfile' | 'resetPass' | '';
 
 export const Users = () => {
     const [open, setOpen] = useState(false)
+    const [activeModal,setActiveModal] = useState(false)
     const [titleModal, setTitleModal] = useState("")
     const [typeModal, settypeModal] = useState<Modal>("")
     const [refreshKey, setRefreshKey] = useState(0)
@@ -26,6 +28,7 @@ export const Users = () => {
         path: `settings/users?_r=${refreshKey}`
     })
     function openModal(title: string, type: Modal, user?: UserRow) {
+        setActiveModal(false)
         setOpen(true)
         setTitleModal(title)
         settypeModal(type)
@@ -70,6 +73,7 @@ export const Users = () => {
             >
                 Agregar usuario
             </ButtonInitium>
+            {activeModal &&<AlertInitium className={style.alert} title='Usuario creado exitosamente' message='El usuario se ha registrado correctamente en el sistema.' variant='success'/>}
             <DataTable<UserRow>
                 columns={columnas(data ?? [], style)}
                 data={data ?? []}
@@ -80,13 +84,18 @@ export const Users = () => {
                 renderActions={renderActions}
             />
             <CenterModal open={open} title={titleModal} onClose={closeModal}>
-                {typeModal === 'addUser' && <AddUser onSuccess={() => { setRefreshKey(k => k + 1); closeModal(); }} />}
+                {typeModal === 'addUser' && <AddUser onSuccess={() => { 
+                    setRefreshKey(k => k + 1); 
+                    closeModal();
+                    setActiveModal(true) }} />}
                 {typeModal === 'deleteUser' && <h2>Eliminar Usuario</h2>}
                 {typeModal === 'assingProfile' && selectedUser && (
                     <AssignProfile
                         userId={selectedUser.id}
                         userName={selectedUser.name}
-                        onSuccess={() => { setRefreshKey(k => k + 1); closeModal(); }}
+                        onSuccess={() => { 
+                            setRefreshKey(k => k + 1); 
+                            closeModal(); }}
                     />
                 )}
                 {typeModal === 'resetPass' && <h2>Resetear Contraseña</h2>}

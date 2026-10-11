@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import style from '../ProfilesTab.module.css';
 import type { AccessRuleTree } from '../ProfilesTab';
-import { useCallApi } from '../../../../../../../hooks/useCallApi';
-import AlertInitium from '../../../../../../transversal/ui/Alert/Alert';
+import { useCallApi } from '../../../../../../../../../hooks/useCallApi';
+import AlertInitium from '../../../../../../../../transversal/ui/Alert/Alert';
 
 interface CreateProfileFormProps {
   onSuccess: () => void;

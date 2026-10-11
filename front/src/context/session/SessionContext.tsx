@@ -21,14 +21,7 @@ interface SessionContextType {
   setModules: (modulos: modulesRouter[]) => void;
   updateCompanyFavorite: (companyId: number, favorite: boolean) => void;
   resetSession: () => void;
+  access:(key:string)=>boolean
 }
 
 export const SessionContext = createContext<SessionContextType | undefined>(undefined);
-
-export function useSession(): SessionContextType {
-  const context = useContext(SessionContext);
-  if (!context) {
-    throw new Error('useSession debe usarse dentro de un SessionProvider');
-  }
-  return context;
-}

@@ -1,7 +1,10 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Pool } from 'pg';
 import { PG_POOL } from '../../../core/database/database.module';
-import { IPrescriptionRepository } from '../types/interfaces/prescription.repository';
+import {
+  IPrescriptionRepository,
+  PrescriptionTemplateRow,
+} from '../types/interfaces/prescription.repository';
 
 @Injectable()
 export class PrescriptionRepositoryImpl implements IPrescriptionRepository {
@@ -9,29 +12,27 @@ export class PrescriptionRepositoryImpl implements IPrescriptionRepository {
 
   constructor(@Inject(PG_POOL) private readonly pool: Pool) {}
 
-  async createPrescription(tenant: string, items: [string, string][]): Promise<void> {
-    this.logger.log(`[createPrescription] Insertando ${items.length} items — tenant: ${tenant}`);
+  async getTemplate(tenant: string, code: string): Promise<PrescriptionTemplateRow | null> {
+    this.logger.log(`[getTemplate] code: ${code} — tenant: ${tenant}`);
 
-    const client = await this.pool.connect();
-    try {
-      await client.query('BEGIN');
+    const result = await this.pool.query<PrescriptionTemplateRow>(
+      `SELECT id, code, type, content, file
+       FROM "${tenant}".document_template
+       WHERE code = $1`,
+      [code],
+    );
 
-      for (const [key, value] of items) {
-        await client.query(
-          `INSERT INTO "${tenant}".prescription (key, value)
-           VALUES ($1, $2)`,
-          [key, value],
-        );
-      }
+    return result.rows[0] ?? null;
+  }
 
-      await client.query('COMMIT');
-      this.logger.log(`[createPrescription] ${items.length} items insertados`);
-    } catch (error) {
-      await client.query('ROLLBACK');
-      this.logger.error(`[createPrescription] Error: ${error}`);
-      throw error;
-    } finally {
-      client.release();
-    }
+  async resetTemplate(tenant: string, code: string): Promise<boolean> {
+    this.logger.log(`[resetTemplate] code: ${code} — tenant: ${tenant}`);
+
+    const result = await this.pool.query(
+      `DELETE FROM "${tenant}".document_template WHERE code = $1`,
+      [code],
+    );
+
+    return (result.rowCount ?? 0) > 0;
   }
 }

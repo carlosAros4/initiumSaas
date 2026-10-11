@@ -43,6 +43,7 @@ CREATE TABLE "CONFIG_MAIN".users (
     dv                      CHAR(1) NOT NULL,
     email                   VARCHAR(150) NOT NULL,
     phone                   VARCHAR(20),
+    gender                  CHAR(1) NOT NULL,
     password                VARCHAR(255) NOT NULL,
     newUsers                BOOLEAN NOT NULL DEFAULT FALSE,
     verified                BOOLEAN NOT NULL DEFAULT FALSE,

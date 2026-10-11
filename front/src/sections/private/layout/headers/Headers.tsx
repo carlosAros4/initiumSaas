@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSession } from '../../../../context/session/SessionContext'
 import ProfileModal from './ProfileModal'
 import style from './Headers.module.css'
 import ModalLateral from '../../../transversal/modal/lateral/ModalLateral'
@@ -9,6 +8,7 @@ import { SelectCompanyModal } from '../utilitatios/SelectCompanyModal/SelectComp
 import { SelectBranchModal } from '../utilitatios/SelectBranchModal/SelectBranchModal'
 import type { Branch, Company } from '../../../../types/session'
 import { useCallApi } from '../../../../hooks/useCallApi'
+import { useSession } from '../../../../hooks/useSession'
 interface HeadersProps {
   onMenuToggle: () => void
 }

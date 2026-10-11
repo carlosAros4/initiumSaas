@@ -12,7 +12,9 @@
   font-weight: 600;
   color: #1f2937;
 }
-
+.alert{
+  margin: 20px 0;
+}
 
 .userEmail {
   font-size: 0.78rem;

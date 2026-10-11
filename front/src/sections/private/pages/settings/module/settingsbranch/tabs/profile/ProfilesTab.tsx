@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import style from './ProfilesTab.module.css';
-import { useCallApi } from '../../../../../../hooks/useCallApi';
+import { useCallApi } from '../../../../../../../../hooks/useCallApi';
 import CreateProfileForm from './components/CreateProfileForm';
 import EditProfileForm from './components/EditProfileForm';
 import DeleteProfileConfirm from './components/DeleteProfileConfirm';
-import Spinner from '../../../../../transversal/ui/Spinner/Spinner';
-import ServiceError from '../../../../../transversal/ui/ServiceError/ServiceError';
-import AlertInitium from '../../../../../transversal/ui/Alert/Alert';
-import CenterModal from '../../../../../transversal/modal/central/CenterModal';
+import Spinner from '../../../../../../../transversal/ui/Spinner/Spinner';
+import ServiceError from '../../../../../../../transversal/ui/ServiceError/ServiceError';
+import AlertInitium from '../../../../../../../transversal/ui/Alert/Alert';
+import CenterModal from '../../../../../../../transversal/modal/central/CenterModal';
 
 export interface AccessRuleTree {
   id: number;

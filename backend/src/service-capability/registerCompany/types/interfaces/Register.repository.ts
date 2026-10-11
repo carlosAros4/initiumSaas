@@ -7,5 +7,6 @@ export interface IRegister {
   asignarCompany(name: string, data: CreateCompanyRequestDto): Promise<boolean>;
   createSchema(name: string): Promise<boolean>;
   insertTablescompany(name: string): Promise<boolean>;
+  insertCompanyVeterinaria(name: string): Promise<boolean>;
   initData(name: string, branchName: string): Promise<boolean>;
 }

@@ -4,6 +4,7 @@ import type { BranchItem } from '../Branches';
 import { useCallApi } from '../../../../../../../hooks/useCallApi';
 import Spinner from '../../../../../../transversal/ui/Spinner/Spinner';
 import ButtonInitium from '../../../../../../transversal/ui/Button/ButtonInitium';
+import { useSession } from '../../../../../../../hooks/useSession';
 
 interface BranchListProps {
   onSelectBranch: (branch: BranchItem) => void;
@@ -11,6 +12,7 @@ interface BranchListProps {
 
 export const BranchList = ({ onSelectBranch }: BranchListProps) => {
   const { useFetch, fetcher } = useCallApi();
+  const {access} = useSession()
   const { data, isLoading, mutate } = useFetch<BranchItem[]>({
     clientType: 'InitiumSaaS-Private',
     path: 'settings/branches',
@@ -89,9 +91,9 @@ export const BranchList = ({ onSelectBranch }: BranchListProps) => {
     <div className={styles.wrapper}>
       <div className={styles.header}>
         <h3 className={styles.sectionTitle}>Sucursales ({data?.length || 0})</h3>
-        <ButtonInitium size="sm" onClick={() => { setShowCreate(true); setEditingId(null); setFormName(''); setFormAddress(''); setFormPhone(''); }}>
+      {access('branches.new') && <ButtonInitium size="sm" onClick={() => { setShowCreate(true); setEditingId(null); setFormName(''); setFormAddress(''); setFormPhone(''); }}>
           + Nueva sucursal
-        </ButtonInitium>
+        </ButtonInitium>}
       </div>
 
       {showCreate && (

@@ -1,10 +1,10 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import componentRegistry from './componentRegistry';
-import { useSession } from '../../../context/session/SessionContext';
 import { Layout } from '../layout/Layout';
 import NotFound from '../pages/notFound/NotFound';
 import { slugify } from '../../../utils/slugify';
 import TestDocumentTemplates from '../pages/settings/module/documentTemplates/TestDocumentTemplates';
+import { useSession } from '../../../hooks/useSession';
 
 export function PrivateRouter() {
   const { modules, companySelect } = useSession();

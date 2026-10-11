@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search'
 import s from './AddUser.module.css'
-import { useCallApi } from '../../../../../../../hooks/useCallApi'
-import Spinner from '../../../../../../transversal/ui/Spinner/Spinner'
-import ServiceError from '../../../../../../transversal/ui/ServiceError/ServiceError'
-import AlertInitium from '../../../../../../transversal/ui/Alert/Alert'
+import { useCallApi } from '../../../../../../../../../hooks/useCallApi'
+import Spinner from '../../../../../../../../transversal/ui/Spinner/Spinner'
+import ServiceError from '../../../../../../../../transversal/ui/ServiceError/ServiceError'
+import AlertInitium from '../../../../../../../../transversal/ui/Alert/Alert'
 
 interface UserResult {
   id: number
@@ -19,6 +19,7 @@ interface NewUserForm {
   lastName: string
   rut: string
   email: string
+  gender: string
 }
 
 export const AddUser = ({ onSuccess }: { onSuccess?: () => void }) => {
@@ -33,7 +34,7 @@ export const AddUser = ({ onSuccess }: { onSuccess?: () => void }) => {
   const [added, setAdded] = useState(false)
 
   // Formulario de creación
-  const [form, setForm] = useState<NewUserForm>({ firstName: '', lastName: '', rut: '', email: '' })
+  const [form, setForm] = useState<NewUserForm>({ firstName: '', lastName: '', rut: '', email: '', gender: '' })
   const [submitting, setSubmitting] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [serviceError, setServiceError] = useState(false)
@@ -222,6 +223,20 @@ export const AddUser = ({ onSuccess }: { onSuccess?: () => void }) => {
               onChange={e => handleFormChange('email', e.target.value)}
               required
             />
+          </div>
+
+          <div className={s.field}>
+            <label htmlFor="adduser-gender">Género</label>
+            <select
+              id="adduser-gender"
+              value={form.gender}
+              onChange={e => handleFormChange('gender', e.target.value)}
+              required
+            >
+              <option value="" disabled>Selecciona una opción</option>
+              <option value="M">Hombre</option>
+              <option value="F">Mujer</option>
+            </select>
           </div>
 
           <button type="submit" className={s.submitBtn} disabled={submitting}>

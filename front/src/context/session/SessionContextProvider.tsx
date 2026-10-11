@@ -78,6 +78,9 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     setModulesState(null);
     setSessionKey((k) => k + 1);
   }
+  function access(key: string){
+    return accessRules.includes(key)
+  }
 
   return (
     <SessionContext.Provider value={{
@@ -99,6 +102,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       setModules,
       updateCompanyFavorite,
       resetSession,
+      access
     }}>
       {children}
     </SessionContext.Provider>

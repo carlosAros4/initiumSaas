@@ -4,6 +4,7 @@ import type { BranchItem } from '../Branches';
 import { useCallApi } from '../../../../../../../hooks/useCallApi';
 import ButtonInitium from '../../../../../../transversal/ui/Button/ButtonInitium';
 import Spinner from '../../../../../../transversal/ui/Spinner/Spinner';
+import { useSession } from '../../../../../../../hooks/useSession';
 
 interface BranchUsersProps {
   branch: BranchItem;
@@ -28,6 +29,7 @@ interface TenantUser {
 }
 
 export const BranchUsers = ({ branch, onBack }: BranchUsersProps) => {
+  const {access} = useSession()
   const { useFetch, fetcher } = useCallApi();
   const { data, isLoading, mutate } = useFetch<BranchUser[]>({
     clientType: 'InitiumSaaS-Private',
@@ -117,9 +119,9 @@ export const BranchUsers = ({ branch, onBack }: BranchUsersProps) => {
             {branch.is_main && <span className={styles.mainBadge}>Principal</span>}
           </h3>
         </div>
-        <ButtonInitium size="sm" onClick={loadAllUsers}>
+        {access("branches.profile") &&<ButtonInitium size="sm" onClick={loadAllUsers}>
           + Agregar usuario
-        </ButtonInitium>
+        </ButtonInitium>}
       </div>
 
       {/* Buscador */}

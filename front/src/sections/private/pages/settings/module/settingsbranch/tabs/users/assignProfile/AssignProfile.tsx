@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import s from './AssignProfile.module.css'
-import { useCallApi } from '../../../../../../../hooks/useCallApi'
-import Spinner from '../../../../../../transversal/ui/Spinner/Spinner'
-import ServiceError from '../../../../../../transversal/ui/ServiceError/ServiceError'
-import AlertInitium from '../../../../../../transversal/ui/Alert/Alert'
+import { useCallApi } from '../../../../../../../../../hooks/useCallApi'
+import Spinner from '../../../../../../../../transversal/ui/Spinner/Spinner'
+import ServiceError from '../../../../../../../../transversal/ui/ServiceError/ServiceError'
+import AlertInitium from '../../../../../../../../transversal/ui/Alert/Alert'
 
 interface ProfileInfo {
   id: number

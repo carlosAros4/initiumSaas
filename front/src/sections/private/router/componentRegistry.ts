@@ -15,10 +15,10 @@ const componentRegistry: Record<string, React.LazyExoticComponent<ComponentType>
 
 
   //configuracion
-  access: lazy(() => import('../pages/settings/Settings')),
+  access: lazy(() => import('../pages/settings/module/settingsbranch/Settings')),
   branches: lazy(() => import('../pages/settings/module/branches/Branches')),
   globalAccess: lazy(() => import('../pages/settings/module/globalAccess/GlobalAccess')),
-  prescriptionConfig: lazy(() => import('../pages/settings/module/prescription/Prescription')),
+  prescriptionConfig: lazy(() => import('../pages/settings/module/prescription/Prescriptions')),
   documentTemplatesTest: lazy(() => import('../pages/settings/module/documentTemplates/TestDocumentTemplates'))
 };
 export default componentRegistry;

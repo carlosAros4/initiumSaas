@@ -23,6 +23,7 @@ export default function StageOneRegister({ onBack, onSuccess }: StageOneRegister
     email: '',
     password: '',
     lastName: '',
+    gender: '',
     confirm: '',
   });
   const [errors, setErrors] = useState<Partial<Record<keyof typeof form, string>>>({});
@@ -36,6 +37,7 @@ export default function StageOneRegister({ onBack, onSuccess }: StageOneRegister
     } else if (!validateRut(form.rut)) {
       e.rut = 'RUT inválido';
     }
+    if (!form.gender) e.gender = 'El género es requerido';
     if (!form.email.trim()) e.email = 'El email es requerido';
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'Email inválido';
     if (!form.password) e.password = 'La contraseña es requerida';
@@ -52,7 +54,7 @@ export default function StageOneRegister({ onBack, onSuccess }: StageOneRegister
     register();
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     const parsed = name === 'rut' ? formatRut(value) : value;
     setForm(prev => ({ ...prev, [name]: parsed }));
@@ -69,6 +71,7 @@ export default function StageOneRegister({ onBack, onSuccess }: StageOneRegister
         "email": form.email,
         "firstName": form.name,
         "lastName": form.lastName,
+        "gender": form.gender,
         "isLoginRegister":true
       },
     })
@@ -135,6 +138,21 @@ export default function StageOneRegister({ onBack, onSuccess }: StageOneRegister
             autoComplete="name"
           />
           {errors.lastName && <span className={s.error}>{errors.lastName}</span>}
+        </div>
+        <div className={s.field}>
+          <label className={s.label} htmlFor="reg-gender">Género</label>
+          <select
+            id="reg-gender"
+            name="gender"
+            className={`${s.input}${errors.gender ? ` ${s.inputError}` : ''}`}
+            value={form.gender}
+            onChange={handleChange}
+          >
+            <option value="" disabled>Selecciona una opción</option>
+            <option value="M">Hombre</option>
+            <option value="F">Mujer</option>
+          </select>
+          {errors.gender && <span className={s.error}>{errors.gender}</span>}
         </div>
         <div className={s.field}>
           <label className={s.label} htmlFor="reg-rut">RUT</label>

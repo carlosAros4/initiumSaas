@@ -1,4 +1,5 @@
-import { useSession } from "../../../../context/session/SessionContext";
+
+import { useSession } from "../../../../hooks/useSession";
 import styles from "./Home.module.css";
 
 export const Home = () => {

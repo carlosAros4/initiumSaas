@@ -61,16 +61,16 @@ export class LoginImpl implements ILoginRepository {
     return result.rowCount > 0;
   }
 
-  async createUser(rut: string, password: string, first_name: string, last_name: string, email: string): Promise<number | null> {
+  async createUser(rut: string, password: string, first_name: string, last_name: string, email: string, gender: string): Promise<number | null> {
     this.logger.log(`[createUser] Creando usuario — rut: ${rut}, email: ${email}`);
     const { cuerpo, dv } = splitRut(rut);
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const result = await this.pool.query<{ id: number }>(
-      `INSERT INTO "CONFIG_MAIN".users (first_name, last_name, rut, dv, email, password,verified,blocked,failed_login_attempts)
-       VALUES ($1, $2, $3, $4, $5, $6,$7,$8,$9)
+      `INSERT INTO "CONFIG_MAIN".users (first_name, last_name, rut, dv, email, gender, password,verified,blocked,failed_login_attempts)
+       VALUES ($1, $2, $3, $4, $5, $6,$7,$8,$9,$10)
        RETURNING id`,
-      [first_name, last_name, cuerpo, dv, email, hashedPassword, false, false, 0],
+      [first_name, last_name, cuerpo, dv, email, gender, hashedPassword, false, false, 0],
     );
 
     const userId = result.rowCount > 0 ? result.rows[0].id : null;
