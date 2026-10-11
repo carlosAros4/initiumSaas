@@ -2,8 +2,14 @@ import { useState } from 'react';
 import { useCallApi } from '../../../../../../hooks/useCallApi';
 import ButtonInitium from '../../../../../transversal/ui/Button/ButtonInitium';
 import AlertInitium, { type AlertVariant } from '../../../../../transversal/ui/Alert/Alert';
-import type { BlobResponse } from '../../../../../../utils/configCallApi/types/fetcher.types';
 import s from './Prescriptions.module.css';
+import { PAPER_FORMATS, type PaperFormat } from '../../../../../../utils/paperFormat';
+
+
+
+interface PrescriptionInit {
+  paperformat: PaperFormat;
+}
 
 interface Medication {
   nombre: string;
@@ -28,10 +34,111 @@ interface AlertI {
   text: string;
 }
 export default function Prescriptions() {
-  const { fetcher } = useCallApi();
+  const { fetcher, useFetch } = useCallApi();
   const [alertData,setAlertData]= useState<AlertI>(null)
+  // Alert propio de la sección "Gestión de plantilla" (descargar / resetear).
+  const [templateAlert, setTemplateAlert] = useState<AlertI>(null);
   const [loadingTest, setLoadingTest] = useState(false);
-  const [activeTest, setActiveTest] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+  const [resetting, setResetting] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  // Plantilla seleccionada para subir: nombre del archivo + su contenido leído.
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [fileContent, setFileContent] = useState<string | null>(null);
+  // null => el usuario aún no tocó el select; se muestra el valor que venga del init.
+  const [paperFormatOverride, setPaperFormatOverride] = useState<PaperFormat | null>(null);
+
+  const { data: init, mutate: refreshInit } = useFetch<PrescriptionInit>({
+    clientType: 'InitiumSaaS-Private',
+    path: 'settings/prescription/init',
+    method: 'GET',
+  });
+
+  // Valor seleccionado: override del usuario → valor del servicio → 'a4' por defecto.
+  const paperFormat: PaperFormat = paperFormatOverride ?? init?.paperformat ?? 'a4';
+
+  const readFile = async (file: File | undefined) => {
+    if (!file) {
+      setFileName(null);
+      setFileContent(null);
+      return;
+    }
+    const text = await file.text();
+    setFileName(file.name);
+    setFileContent(text);
+  };
+
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    readFile(e.target.files?.[0]);
+  };
+
+  const onDrop = (e: React.DragEvent<HTMLLabelElement>) => {
+    e.preventDefault();
+    readFile(e.dataTransfer.files?.[0]);
+  };
+
+  const uploadTemplate = async () => {
+    // Se puede subir plantilla nueva, cambiar solo el formato de papel, o ambos.
+    const body: { content?: string; paperformat: PaperFormat } = { paperformat: paperFormat };
+    if (fileContent) {
+      body.content = fileContent;
+    }
+
+    setUploading(true);
+    try {
+      await fetcher({
+        clientType: 'InitiumSaaS-Private',
+        path: 'settings/prescription',
+        method: 'PUT',
+        body,
+      });
+      setFileName(null);
+      setFileContent(null);
+      refreshInit();
+      setTemplateAlert({
+        text: fileContent
+          ? 'Plantilla actualizada correctamente'
+          : 'Formato de papel actualizado correctamente',
+        variant: 'success',
+      });
+    } catch {
+      setTemplateAlert({ text: 'No pudimos guardar los cambios, intente más tarde', variant: 'error' });
+    }
+    setUploading(false);
+  };
+
+  const downloadTemplate = async () => {
+    setDownloading(true);
+    try {
+      await fetcher({
+        clientType: 'InitiumSaaS-Private',
+        path: 'settings/prescription/download',
+        method: 'GET',
+        document: true,
+      });
+      setTemplateAlert({ text: 'Plantilla descargada de forma exitosa', variant: 'success' });
+    } catch {
+      setTemplateAlert({ text: 'No pudimos descargar la plantilla, intente más tarde', variant: 'error' });
+    }
+    setDownloading(false);
+  };
+
+  const resetTemplate = async () => {
+    setResetting(true);
+    try {
+      await fetcher({
+        clientType: 'InitiumSaaS-Private',
+        path: 'settings/prescription/reset',
+        method: 'POST',
+      });
+      setPaperFormatOverride(null);
+      refreshInit();
+      setTemplateAlert({ text: 'Plantilla restaurada a la versión por defecto', variant: 'success' });
+    } catch {
+      setTemplateAlert({ text: 'No pudimos resetear la plantilla, intente más tarde', variant: 'error' });
+    }
+    setResetting(false);
+  };
  
   const [receta,setReceta] = useState<RecetaForm>({
     nombrePaciente:'firulais',
@@ -80,27 +187,22 @@ export default function Prescriptions() {
   };
 
   const testingReceta = async ()=>{
-
-    await fetcher({
-      clientType:'InitiumSaaS-Private',
-      path:'settings/prescription/preview',
-      method:'POST',
-      document:true,
-      body:receta
-    }).then(()=>{
-setAlertData({
-    text:'Documento descargado de forma exitosa',variant:'success'
-  })
-    })
-    .catch((error)=>{
-      setAlertData({
-    text:'No Pudimos descargar el documento, Intente mas tarde',variant:'error'
-  })
-    });
-
-
-     
+    setLoadingTest(true);
+    try {
+      await fetcher({
+        clientType:'InitiumSaaS-Private',
+        path:'settings/prescription/preview',
+        method:'POST',
+        document:true,
+        body:receta
+      });
+      setAlertData({ text:'Documento descargado de forma exitosa', variant:'success' });
+    } catch {
+      setAlertData({ text:'No Pudimos descargar el documento, Intente mas tarde', variant:'error' });
+    }
+    setLoadingTest(false);
   }
+
   return (
     <div className={s.page}>
       <div className={s.header}>
@@ -111,44 +213,77 @@ setAlertData({
         <h2 className={s.cardTitle}>Gestión de plantilla</h2>
 
         <label className={s.field}>
-          <span>Nombre de plantilla</span>
-          {/* <input
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Receta veterinaria"
-          /> */}
+          <span>Formato de papel</span>
+          <select
+            className={s.select}
+            value={paperFormat}
+            onChange={(e) => setPaperFormatOverride(e.target.value as PaperFormat)}
+          >
+            {PAPER_FORMATS.map((format) => (
+              <option key={format} value={format}>
+                {format}
+              </option>
+            ))}
+          </select>
         </label>
 
-        <label className={s.field}>
+        <div className={s.field}>
           <span>Archivo plantilla (.hbs / .html)</span>
-          {/* <input
-            type="file"
-            accept={
-                '.hbs,.handlebars,.html,.htm,text/html'
-            }
-            onChange={onFileChange}
-          /> */}
-          {/* {fileName && <small className={s.fileName}>Seleccionado: {fileName}</small>} */}
-        </label>
-
-        <div className={s.actions}>
-          {/* <ButtonInitium variant="contained" loading={uploading} onClick={uploadTemplate}>
-            Subir plantilla
-          </ButtonInitium>
-          <ButtonInitium variant="outlined" onClick={downloadTemplate}>
-            Descargar plantilla
-          </ButtonInitium>
-          <ButtonInitium variant="text" onClick={resetTemplate}>
-            Resetear plantilla
-          </ButtonInitium> */}
+          <label
+            className={`${s.dropzone} ${fileName ? s.dropzoneActive : ''}`}
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={onDrop}
+          >
+            <input
+              type="file"
+              className={s.fileInput}
+              accept=".hbs,.handlebars,.html,.htm,text/html"
+              onChange={onFileChange}
+            />
+            <svg
+              className={s.dropIcon}
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+            {fileName ? (
+              <span className={s.dropFileName}>{fileName}</span>
+            ) : (
+              <span className={s.dropText}>
+                <strong>Haz clic para subir</strong> o arrastra el archivo aquí
+                <small>.hbs, .handlebars o .html</small>
+              </span>
+            )}
+          </label>
         </div>
 
-        {/* {templateAlert && (
+        <div className={s.actions}>
+          <ButtonInitium variant="contained" loading={uploading} onClick={uploadTemplate}>
+            {fileContent ? 'Subir plantilla' : 'Guardar formato'}
+          </ButtonInitium>
+          <ButtonInitium variant="outlined" loading={downloading} onClick={downloadTemplate}>
+            Descargar plantilla
+          </ButtonInitium>
+          <ButtonInitium variant="text" loading={resetting} onClick={resetTemplate}>
+            Resetear plantilla
+          </ButtonInitium>
+        </div>
+
+        {templateAlert && (
           <div className={s.alertWrap}>
             <AlertInitium variant={templateAlert.variant} message={templateAlert.text} />
           </div>
-        )} */}
+        )}
       </section>
 
       {/* ─── Formulario de prueba ─── */}
@@ -284,7 +419,7 @@ setAlertData({
           <ButtonInitium
             variant="contained"
             loading={loadingTest}
-            disabled={activeTest}
+            disabled={loadingTest}
             onClick={testingReceta}
           >
             Probar

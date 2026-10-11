@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsArray,
+  IsIn,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -8,6 +9,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { paperFormart } from '../../../../core/utils/document/index/sectionPDF';
 
 /** Un medicamento dentro de la receta. */
 export class PrescriptionMedicationDto {
@@ -86,4 +88,29 @@ export class CreatePrescriptionDto {
 
 export interface PrescriptionResponse {
   message: string;
+}
+
+/**
+ * DTO para subir/actualizar la plantilla de receta.
+ * Ambos campos son opcionales: se puede subir una plantilla nueva (`content`),
+ * cambiar solo el formato de papel (`paperformat`), o ambos.
+ */
+export class UploadPrescriptionTemplateDto {
+  @ApiPropertyOptional({
+    description: 'Plantilla Handlebars/HTML de la receta (opcional)',
+    example: '<html><body>{{paciente_nombre}}</body></html>',
+  })
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty({ message: 'content no puede estar vacío' })
+  content?: string;
+
+  @ApiPropertyOptional({
+    description: 'Formato de papel (opcional)',
+    enum: ['letter', 'legal', 'tabloid', 'ledger', 'a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6'],
+    example: 'a4',
+  })
+  @IsOptional()
+  @IsIn(['letter', 'legal', 'tabloid', 'ledger', 'a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6'])
+  paperformat?: paperFormart;
 }

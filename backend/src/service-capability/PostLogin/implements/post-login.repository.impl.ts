@@ -201,7 +201,7 @@ export class PostLoginImpl implements IPostLoginRepository {
   async getUserData(rut: string, dv: string): Promise<UserData> {
     this.logger.log(`[getUserData] Obteniendo datos del usuario — rut: ${rut}`);
     const result = await this.pool.query<UserData>(
-      `SELECT first_name, last_name, email, blocked, verified, newusers
+      `SELECT first_name, last_name, email, blocked, verified, newusers,gender
        FROM "CONFIG_MAIN".users
        WHERE rut = $1 AND dv = $2
        LIMIT 1`,

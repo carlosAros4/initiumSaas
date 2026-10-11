@@ -7,6 +7,7 @@ export interface UserData {
   last_name: string;
   email: string;
   blocked: boolean;
+  gender: 'M'|'F'
   verified: boolean;
   newusers: boolean;
 }

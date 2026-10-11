@@ -1,21 +1,20 @@
 import {
+  BadRequestException,
   Inject,
   Injectable,
   Logger,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
-import { CreatePrescriptionDto } from '../types/dto/prescription.dto';
+import { CreatePrescriptionDto, UploadPrescriptionTemplateDto } from '../types/dto/prescription.dto';
 import { DocumentGenerator, TypeDocument } from '../../../core/utils/document/DocumentGenerator';
 import {
   IPrescriptionRepository,
   PRESCRIPTION_REPOSITORY,
+  PrescriptionInitRow,
   PrescriptionTemplateRow,
 } from '../types/interfaces/prescription.repository';
-import { USER_SESSION, UserSession } from 'src/core/providers/user-session';
 
-/** Código lógico de la plantilla de receta en document_template. */
-export const PRESCRIPTION_TEMPLATE_CODE = 'prescription';
+export const PRESCRIPTION_TEMPLATE_CODE = 'receta-digital';
 
 @Injectable()
 export class PrescriptionService {
@@ -24,15 +23,7 @@ export class PrescriptionService {
   constructor(
     private readonly documentGenerator: DocumentGenerator,
     @Inject(PRESCRIPTION_REPOSITORY) private readonly repository: IPrescriptionRepository,
-    @Inject(USER_SESSION) private readonly userSession: UserSession | null,
   ) {}
-
-  private getTenant(): string {
-    if (!this.userSession || !this.userSession.tenant_id) {
-      throw new UnauthorizedException('No hay empresa seleccionada en la sesión');
-    }
-    return this.userSession.tenant_id;
-  }
 
   /** Mapea el DTO al objeto de datos que consume la plantilla (Handlebars / Excel). */
   private buildTemplateData(dto: CreatePrescriptionDto): Record<string, unknown> {
@@ -63,35 +54,56 @@ export class PrescriptionService {
     });
   }
 
-  async createPrescriptionExcel(dto: CreatePrescriptionDto): Promise<Buffer> {
-    this.logger.log('[createPrescriptionExcel] Generando Excel de receta');
-    return this.documentGenerator.createDocument({
-      type: 'EXCEL',
-      code: PRESCRIPTION_TEMPLATE_CODE,
-      data: this.buildTemplateData(dto),
-    });
-  }
-
-  /** Devuelve la plantilla cruda (content o file) para descarga. */
-  async getTemplate(): Promise<PrescriptionTemplateRow> {
+  async downloadTemplate(): Promise<PrescriptionTemplateRow> {
     this.logger.log('[getTemplate] Obteniendo plantilla de receta');
-    const tenant = this.getTenant();
-    const template = await this.repository.getTemplate(tenant, PRESCRIPTION_TEMPLATE_CODE);
+    const template = await this.repository.downloadTemplate(PRESCRIPTION_TEMPLATE_CODE);
     if (!template) {
       throw new NotFoundException('No existe una plantilla de receta configurada');
     }
     return template;
   }
 
-  /** Elimina la plantilla de receta (reset). */
+  /** Devuelve el formato de papel de la plantilla (para inicializar el editor). */
+  async getInit(): Promise<PrescriptionInitRow> {
+    this.logger.log('[getInit] Obteniendo paperformat de la plantilla de receta');
+    const init = await this.repository.getInit(PRESCRIPTION_TEMPLATE_CODE);
+    if (!init) {
+      throw new NotFoundException('No existe una plantilla de receta configurada');
+    }
+    return init;
+  }
+
+  /**
+   * Sube/actualiza la plantilla de receta. Permite subir una plantilla nueva (`content`),
+   * cambiar solo el formato de papel (`paperformat`), o ambos.
+   */
+  async uploadTemplate(dto: UploadPrescriptionTemplateDto): Promise<{ message: string }> {
+    this.logger.log('[uploadTemplate] Actualizando plantilla de receta');
+
+    if (dto.content === undefined && dto.paperformat === undefined) {
+      throw new BadRequestException('Debes enviar al menos content o paperformat');
+    }
+
+    const updated = await this.repository.uploadTemplate(
+      PRESCRIPTION_TEMPLATE_CODE,
+      dto.content,
+      dto.paperformat,
+    );
+    if (!updated) {
+      throw new NotFoundException('No existe una plantilla de receta configurada');
+    }
+    return { message: 'Plantilla de receta actualizada correctamente' };
+  }
+
+  /** Resetea la plantilla de receta restaurando el contenido/paperformat por defecto. */
   async resetTemplate(): Promise<{ message: string }> {
-    this.logger.log('[resetTemplate] Reseteando plantilla de receta');
-    const tenant = this.getTenant();
-    const deleted = await this.repository.resetTemplate(tenant, PRESCRIPTION_TEMPLATE_CODE);
+    this.logger.log('[resetTemplate] Reseteando plantilla de receta a la versión por defecto');
+    const updated = await this.repository.resetTemplate(PRESCRIPTION_TEMPLATE_CODE);
+    if (!updated) {
+      throw new NotFoundException('No existe una plantilla de receta configurada');
+    }
     return {
-      message: deleted
-        ? 'Plantilla de receta eliminada correctamente'
-        : 'No había plantilla de receta que eliminar',
+      message: 'Plantilla de receta restaurada a la versión por defecto',
     };
   }
 }

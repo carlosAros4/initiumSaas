@@ -7,6 +7,7 @@ import { USER_SESSION, UserSession } from 'src/core/providers/user-session';
 import { encryptTenantId } from 'src/core/providers/user-session/user-session.provider';
 import { RedisService } from 'src/core/redis';
 import { PageTree } from '../types/dto/page-tree';
+import { DataCliente } from '../types/dto/data-cliente';
 
 const ACCESS_EXPIRES = '7m';
 const REFRESH_EXPIRES = '7d';
@@ -109,17 +110,21 @@ export class PostLoginService {
       this.userSession.dv,
     );
 
-    await this.redis.setLogin(redisKey, 'data_cliente', {
+    const dataCliente: DataCliente = {
       companies,
       userId: this.userSession.sub,
       rut: this.userSession.rut,
+      dv: this.userSession.dv,
       firstName: userData?.first_name || '',
       lastName: userData?.last_name || '',
+      gender: userData.gender,
       email: userData?.email || '',
       blocked: userData?.blocked || false,
       verified: userData?.verified || false,
       newUsers: userData?.newusers || false,
-    });
+    };
+
+    await this.redis.setLogin(redisKey, 'data_cliente', dataCliente);
 
     // Generar nuevo token con session_id, tenant_id y branch_id
     const jwtSecret = process.env.JWT_SECRET;

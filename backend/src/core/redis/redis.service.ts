@@ -29,14 +29,14 @@ export class RedisService {
     const value = JSON.stringify(data);
     await this.redis.set(this.getSessionKey(id), value, 'EX', DEFAULT_TTL);
   }
-
-  /**
-   * Lee data usando el id de sesión del token como key.
-   */
   async get<T = any>(id: keys_redis): Promise<T | null> {
     const value = await this.redis.get(this.getSessionKey(id));
     return value ? JSON.parse(value) : null;
   }
+  /**
+   * Lee data usando el id de sesión del token como key.
+   */
+
    async setGeneric<T = any>(id: string, data: T): Promise<void> {
     const value = JSON.stringify(data);
     await this.redis.set(this.getSessionKey(id), value, 'EX', DEFAULT_TTL);

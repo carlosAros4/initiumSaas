@@ -1,20 +1,27 @@
 import { TypeDocument } from '../../../../core/utils/document/DocumentGenerator';
+import { paperFormart } from '../../../../core/utils/document/index/sectionPDF';
 
 export const PRESCRIPTION_REPOSITORY = 'PRESCRIPTION_REPOSITORY';
 
-/** Plantilla de receta recuperada para descarga. */
 export interface PrescriptionTemplateRow {
-  id: number;
-  code: string;
-  type: TypeDocument;
-  content: string | null;
-  file: Buffer | null;
+  content: string;
+}
+
+export interface PrescriptionInitRow {
+  paperformat: paperFormart | null;
 }
 
 export interface IPrescriptionRepository {
-  /** Obtiene la plantilla de receta del tenant (o null si no existe). */
-  getTemplate(tenant: string, code: string): Promise<PrescriptionTemplateRow | null>;
+  downloadTemplate(code: string): Promise<PrescriptionTemplateRow | null>;
 
-  /** Elimina (resetea) la plantilla de receta del tenant. Devuelve true si borró algo. */
-  resetTemplate(tenant: string, code: string): Promise<boolean>;
+
+  getInit(code: string): Promise<PrescriptionInitRow | null>;
+
+  uploadTemplate(
+    code: string,
+    content?: string,
+    paperformat?: paperFormart,
+  ): Promise<boolean>;
+
+  resetTemplate(code: string): Promise<boolean>;
 }

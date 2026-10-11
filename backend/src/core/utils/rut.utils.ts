@@ -15,6 +15,22 @@ export function splitRut(rutCompleto: string): RutParts {
 }
 
 /**
+ * Construye un RUT formateado con puntos y guión a partir del cuerpo y el dv.
+ * Ej: formatRut('12345678', '9') → "12.345.678-9"
+ * @param cuerpo Cuerpo numérico del RUT (sin puntos ni guión)
+ * @param dv Dígito verificador
+ */
+export function formatRut(cuerpo: string, dv: string): string {
+  const cleanCuerpo = cuerpo.replace(/\D/g, '');
+  if (!cleanCuerpo || !dv) {
+    throw new Error(`RUT con formato inválido: "${cuerpo}-${dv}"`);
+  }
+
+  const withDots = cleanCuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return `${withDots}-${dv.toUpperCase()}`;
+}
+
+/**
  * Calcula el dígito verificador esperado de un RUT chileno.
  * @param rut Cuerpo numérico del RUT (sin dv, sin puntos ni guión)
  */
