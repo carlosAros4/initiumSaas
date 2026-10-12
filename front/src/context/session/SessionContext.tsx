@@ -1,9 +1,9 @@
 import { createContext, useContext } from 'react';
-import type { Branch, ClienteData, Company, user } from '../../types/session';
+import type { Branch, ClienteData, Company } from '../../types/session';
 import type { modulesRouter, PageTree } from '../../types/page-tree';
 
 interface SessionContextType {
-  cliente: user | null;
+  cliente: ClienteData | null;
   companies: Company[] | null;
   companySelect: Company | null;
   branches: Branch[] | null;

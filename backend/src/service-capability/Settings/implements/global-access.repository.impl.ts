@@ -10,8 +10,8 @@ export class GlobalAccessRepositoryImpl implements IGlobalAccessRepository {
 
   constructor(@Inject(PG_POOL) private readonly pool: Pool) {}
 
-  async getGlobalPagesWithRules(): Promise<GlobalPageAccess[]> {
-    this.logger.log('[getGlobalPagesWithRules] Obteniendo páginas globales y sus reglas');
+  async getGlobalPagesWithRules(tenant: string): Promise<GlobalPageAccess[]> {
+    this.logger.log(`[getGlobalPagesWithRules] Obteniendo páginas globales y sus reglas — tenant: ${tenant}`);
 
     const pagesResult = await this.pool.query<{ id: number; name: string; access_id: number }>(
       `SELECT p.id, p.name, p.access_id
@@ -19,7 +19,22 @@ export class GlobalAccessRepositoryImpl implements IGlobalAccessRepository {
        WHERE p.active = true
          AND p.scope_type = 'global'
          AND p.access_id IS NOT NULL
+         AND (
+           -- Página transversal: sin asociación a tipos de empresa.
+           NOT EXISTS (
+             SELECT 1 FROM "CONFIG_MAIN".page_company_type pct
+             WHERE pct.page_id = p.id
+           )
+           -- Página exclusiva: pertenece al tipo de empresa del tenant actual.
+           OR EXISTS (
+             SELECT 1
+             FROM "CONFIG_MAIN".page_company_type pct
+             INNER JOIN "CONFIG_MAIN".company c ON c.type_id = pct.company_type_id
+             WHERE pct.page_id = p.id AND c.tenant_id = $1
+           )
+         )
        ORDER BY p."order"`,
+      [tenant],
     );
 
     if (pagesResult.rowCount === 0) {

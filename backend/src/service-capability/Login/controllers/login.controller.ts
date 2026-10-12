@@ -40,7 +40,7 @@ export class LoginController {
     if (!body.isLogin) {
       this.logger.log(`[createSession] Flujo onboarding — token en body`);
       return { accessToken: accessToken, refresh:refreshToken,
-        verified: verified, blocked, newUsers, };
+        verified: verified, blocked, newUsers };
     }
 
     // Tipo 2: tokens en cookies seguras (flujo sesión completa)

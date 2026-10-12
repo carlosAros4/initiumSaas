@@ -1,7 +1,7 @@
-import { Inject, Injectable, Logger, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import { Inject, Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { IGlobalAccessRepository, GLOBAL_ACCESS_REPOSITORY } from '../types/interfaces/global-access.repository';
 import { GlobalAccessSectionResponse, UserGlobalAccessResponse, GlobalAccessResponse } from '../types/dto/users.dto';
-import { USER_SESSION, UserSession } from 'src/core/providers/user-session';
+import { SessionContextService } from 'src/core/providers/user-session';
 
 @Injectable()
 export class GlobalAccessService {
@@ -9,25 +9,15 @@ export class GlobalAccessService {
 
   constructor(
     @Inject(GLOBAL_ACCESS_REPOSITORY) private readonly repository: IGlobalAccessRepository,
-    @Inject(USER_SESSION) private readonly userSession: UserSession | null,
+    private readonly session: SessionContextService,
   ) {}
-
-  private validateSession(): { tenant: string; branchId: number | null } {
-    if (!this.userSession || !this.userSession.tenant_id) {
-      throw new UnauthorizedException('No hay empresa seleccionada en la sesión');
-    }
-    return {
-      tenant: this.userSession.tenant_id,
-      branchId: this.userSession.branch_id || null,
-    };
-  }
 
   async getGlobalAccessSection(): Promise<GlobalAccessSectionResponse> {
     this.logger.log('[getGlobalAccessSection] Obteniendo páginas globales y usuarios');
-    const { tenant } = this.validateSession();
+    const { tenant } = this.session.getValidatedSession();
 
     const [pages, users] = await Promise.all([
-      this.repository.getGlobalPagesWithRules(),
+      this.repository.getGlobalPagesWithRules(tenant),
       this.repository.getGlobalAccessUsers(tenant),
     ]);
 
@@ -36,16 +26,16 @@ export class GlobalAccessService {
 
   async getUserGlobalAccess(userId: number): Promise<UserGlobalAccessResponse> {
     this.logger.log(`[getUserGlobalAccess] Obteniendo accesos globales de usuario ${userId}`);
-    const { tenant } = this.validateSession();
+    const { tenant } = this.session.getValidatedSession();
     const accessKeys = await this.repository.getUserGlobalAccess(tenant, userId);
     return { accessKeys };
   }
 
   async assignGlobalAccessToUser(userId: number, accessKeys: string[]): Promise<GlobalAccessResponse> {
     this.logger.log(`[assignGlobalAccessToUser] Asignando accesos globales a usuario ${userId}`);
-    const { tenant } = this.validateSession();
+    const { tenant } = this.session.getValidatedSession();
 
-    const globalPages = await this.repository.getGlobalPagesWithRules();
+    const globalPages = await this.repository.getGlobalPagesWithRules(tenant);
     const allowedKeys = new Set<string>();
     const collect = (nodes: { key: string; children: any[] }[]) => {
       for (const n of nodes) {

@@ -28,6 +28,10 @@ import { BRANCHES_REPOSITORY } from './types/interfaces/branches.repository';
 import { GLOBAL_ACCESS_REPOSITORY } from './types/interfaces/global-access.repository';
 import { PRESCRIPTION_REPOSITORY } from './types/interfaces/prescription.repository';
 import { DOCUMENT_TEMPLATE_REPOSITORY } from './types/interfaces/document-template.repository';
+import { DoctorSignatureController } from './controllers/doctor-signature.controller';
+import { DoctorSignatureService } from './service/doctor-signature.service';
+import { DOCTORSIGNATURE_REPOSITORY } from './types/interfaces/doctorSignature.repository';
+import { DoctorSignatureRepositoryImpl } from './implements/doctor-signature.repository.impl';
 
 @Module({
   controllers: [
@@ -37,6 +41,7 @@ import { DOCUMENT_TEMPLATE_REPOSITORY } from './types/interfaces/document-templa
     GlobalAccessController,
     PrescriptionController,
     DocumentTemplateController,
+    DoctorSignatureController
   ],
   providers: [
     UsersService,
@@ -46,12 +51,14 @@ import { DOCUMENT_TEMPLATE_REPOSITORY } from './types/interfaces/document-templa
     PrescriptionService,
     DocumentTemplateService,
     DocumentGenerator,
+    DoctorSignatureService,
     { provide: USERS_REPOSITORY, useClass: UsersRepositoryImpl },
     { provide: PROFILES_REPOSITORY, useClass: ProfilesRepositoryImpl },
     { provide: BRANCHES_REPOSITORY, useClass: BranchesRepositoryImpl },
     { provide: GLOBAL_ACCESS_REPOSITORY, useClass: GlobalAccessRepositoryImpl },
     { provide: PRESCRIPTION_REPOSITORY, useClass: PrescriptionRepositoryImpl },
     { provide: DOCUMENT_TEMPLATE_REPOSITORY, useClass: DocumentTemplateRepositoryImpl },
+    { provide: DOCTORSIGNATURE_REPOSITORY, useClass: DoctorSignatureRepositoryImpl },
   ],
 })
 export class SettingsModule {}

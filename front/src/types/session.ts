@@ -24,9 +24,10 @@ export interface Branch {
 }
 
 export interface ClienteData {
-  companies: Company[];
-  userId: number;
+  companies?: Company[];
+  userId?: number;
   rut: string;
+  dv: string;
   firstName: string;
   lastName: string;
   email: string;

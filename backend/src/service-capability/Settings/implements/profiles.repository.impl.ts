@@ -13,8 +13,8 @@ export class ProfilesRepositoryImpl implements IProfilesRepository {
   // Páginas activas que poseen un access_rule. Son la fuente de los nodos de
   // acceso: su posición en el árbol se deriva de la jerarquía de páginas
   // (page.parent_id), y su scope del scope_type de la página.
-  async getPageAccessRows(): Promise<PageAccessRow[]> {
-    this.logger.log('[getPageAccessRows] Obteniendo páginas con access_rule');
+  async getPageAccessRows(tenant: string): Promise<PageAccessRow[]> {
+    this.logger.log(`[getPageAccessRows] Obteniendo páginas con access_rule — tenant: ${tenant}`);
 
     const result = await this.pool.query<{
       page_id: number;
@@ -36,7 +36,22 @@ export class ProfilesRepositoryImpl implements IProfilesRepository {
       FROM "CONFIG_MAIN".page p
       INNER JOIN "CONFIG_MAIN".access_rule ar ON ar.id = p.access_id
       WHERE p.active = true
+        AND (
+          -- Página transversal: sin asociación a tipos de empresa.
+          NOT EXISTS (
+            SELECT 1 FROM "CONFIG_MAIN".page_company_type pct
+            WHERE pct.page_id = p.id
+          )
+          -- Página exclusiva: pertenece al tipo de empresa del tenant actual.
+          OR EXISTS (
+            SELECT 1
+            FROM "CONFIG_MAIN".page_company_type pct
+            INNER JOIN "CONFIG_MAIN".company c ON c.type_id = pct.company_type_id
+            WHERE pct.page_id = p.id AND c.tenant_id = $1
+          )
+        )
       ORDER BY p."order"`,
+      [tenant],
     );
 
     this.logger.log(`[getPageAccessRows] Páginas con acceso: ${result.rows.length}`);

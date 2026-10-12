@@ -19,6 +19,9 @@ const componentRegistry: Record<string, React.LazyExoticComponent<ComponentType>
   branches: lazy(() => import('../pages/settings/module/branches/Branches')),
   globalAccess: lazy(() => import('../pages/settings/module/globalAccess/GlobalAccess')),
   prescriptionConfig: lazy(() => import('../pages/settings/module/prescription/Prescriptions')),
-  documentTemplatesTest: lazy(() => import('../pages/settings/module/documentTemplates/TestDocumentTemplates'))
+  doctorSignature: lazy(() =>import('../pages/settings/module/doctorSignature/DoctorSignature')),
+  
+
+
 };
 export default componentRegistry;

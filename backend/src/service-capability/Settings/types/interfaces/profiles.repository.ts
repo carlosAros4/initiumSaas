@@ -3,7 +3,7 @@ import { PageAccessRow, AccessActionRow, ProfileWithAccess, UserProfileInfo } fr
 export const PROFILES_REPOSITORY = 'PROFILES_REPOSITORY';
 
 export interface IProfilesRepository {
-  getPageAccessRows(): Promise<PageAccessRow[]>;
+  getPageAccessRows(tenant: string): Promise<PageAccessRow[]>;
   getAccessActions(): Promise<AccessActionRow[]>;
   getProfilesWithAccess(tenant: string, branchId: number | null): Promise<ProfileWithAccess[]>;
   createProfile(tenant: string, name: string, description: string, accessKeys: string[], branchId: number | null): Promise<void>;

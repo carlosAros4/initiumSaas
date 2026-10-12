@@ -34,3 +34,19 @@ export function validateRut(raw: string): boolean {
   if (isNaN(body)) return false;
   return calcDv(body) === dv;
 }
+
+/**
+ * Une un cuerpo de RUT y su dígito verificador en el formato estándar chileno.
+ * Ej: formatRutDv('12345678', '9') -> '12.345.678-9'
+ *
+ * @param rut cuerpo del RUT (puede venir con puntos/guion; se limpia).
+ * @param dv  dígito verificador (0-9 o K).
+ * @returns RUT formateado, o '' si no hay cuerpo.
+ */
+export function formatRutDv(rut: string | number, dv: string): string {
+  const body = String(rut).replace(/[^0-9]/g, '');
+  if (body.length === 0) return '';
+  const cleanDv = String(dv).replace(/[^0-9kK]/g, '').toUpperCase();
+  const formatted = body.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return cleanDv ? `${formatted}-${cleanDv}` : formatted;
+}

@@ -1,7 +1,7 @@
-import { Inject, Injectable, Logger, UnauthorizedException, ConflictException, BadRequestException } from '@nestjs/common';
+import { Inject, Injectable, Logger, ConflictException, BadRequestException } from '@nestjs/common';
 import { IProfilesRepository, PROFILES_REPOSITORY } from '../types/interfaces/profiles.repository';
 import { AccessRuleTree, PageAccessRow, AccessActionRow, ProfilesSectionResponse, CreateProfileDto, CreateProfileResponse, UpdateProfileDto, UserProfilesResponse } from '../types/dto/users.dto';
-import { USER_SESSION, UserSession } from 'src/core/providers/user-session';
+import { SessionContextService } from 'src/core/providers/user-session';
 
 @Injectable()
 export class ProfilesService {
@@ -9,25 +9,15 @@ export class ProfilesService {
 
   constructor(
     @Inject(PROFILES_REPOSITORY) private readonly repository: IProfilesRepository,
-    @Inject(USER_SESSION) private readonly userSession: UserSession | null,
+    private readonly session: SessionContextService,
   ) {}
-
-  private validateSession(): { tenant: string; branchId: number | null } {
-    if (!this.userSession || !this.userSession.tenant_id) {
-      throw new UnauthorizedException('No hay empresa seleccionada en la sesión');
-    }
-    return {
-      tenant: this.userSession.tenant_id,
-      branchId: this.userSession.branch_id || null,
-    };
-  }
 
   async getSeccionProfiles(): Promise<ProfilesSectionResponse> {
     this.logger.log('[getSeccionProfiles] Obteniendo perfiles con accesos y reglas de acceso');
-    const { tenant, branchId } = this.validateSession();
+    const { tenant, branchId } = this.session.getValidatedSession();
 
     const profiles = await this.repository.getProfilesWithAccess(tenant, branchId);
-    const pageAccessRows = await this.repository.getPageAccessRows();
+    const pageAccessRows = await this.repository.getPageAccessRows(tenant);
     const accessActions = await this.repository.getAccessActions();
 
     // Dos ramas según el scope de la PÁGINA que origina cada acceso.
@@ -137,7 +127,7 @@ export class ProfilesService {
 
   async createProfile(dto: CreateProfileDto): Promise<CreateProfileResponse> {
     this.logger.log(`[createProfile] Creando perfil: ${dto.name}`);
-    const { tenant, branchId } = this.validateSession();
+    const { tenant, branchId } = this.session.getValidatedSession();
 
     if (!dto.name || dto.name.trim().length < 3) {
       throw new BadRequestException('El nombre del perfil debe tener al menos 3 caracteres');
@@ -159,7 +149,7 @@ export class ProfilesService {
 
   async updateProfile(profileId: number, dto: UpdateProfileDto): Promise<CreateProfileResponse> {
     this.logger.log(`[updateProfile] Editando perfil ${profileId}: ${dto.name}`);
-    const { tenant } = this.validateSession();
+    const { tenant } = this.session.getValidatedSession();
 
     if (!dto.name || dto.name.trim().length < 3) {
       throw new BadRequestException('El nombre del perfil debe tener al menos 3 caracteres');
@@ -179,21 +169,21 @@ export class ProfilesService {
 
   async deleteProfile(profileId: number): Promise<CreateProfileResponse> {
     this.logger.log(`[deleteProfile] Eliminando perfil ${profileId}`);
-    const { tenant } = this.validateSession();
+    const { tenant } = this.session.getValidatedSession();
     await this.repository.deleteProfile(tenant, profileId);
     return { message: 'Perfil eliminado exitosamente' };
   }
 
   async getUserProfiles(userId: number): Promise<UserProfilesResponse> {
     this.logger.log(`[getUserProfiles] Obteniendo perfiles para usuario ${userId}`);
-    const { tenant, branchId } = this.validateSession();
+    const { tenant, branchId } = this.session.getValidatedSession();
     const profiles = await this.repository.getUserProfiles(tenant, userId, branchId);
     return { profiles };
   }
 
   async assignProfilesToUser(userId: number, profileIds: number[]): Promise<CreateProfileResponse> {
     this.logger.log(`[assignProfilesToUser] Asignando perfiles a usuario ${userId}`);
-    const { tenant, branchId } = this.validateSession();
+    const { tenant, branchId } = this.session.getValidatedSession();
     await this.repository.assignProfilesToUser(tenant, userId, profileIds, branchId);
     return { message: 'Perfiles asignados exitosamente' };
   }

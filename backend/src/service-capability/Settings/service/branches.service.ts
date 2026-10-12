@@ -1,7 +1,7 @@
-import { Inject, Injectable, Logger, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import { Inject, Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { IBranchesRepository, BRANCHES_REPOSITORY } from '../types/interfaces/branches.repository';
 import { BranchItem, CreateBranchDto, UpdateBranchDto, BranchUserItem, UpdateBranchUserDto, BranchResponse } from '../types/dto/users.dto';
-import { USER_SESSION, UserSession } from 'src/core/providers/user-session';
+import { SessionContextService } from 'src/core/providers/user-session';
 
 @Injectable()
 export class BranchesService {
@@ -9,28 +9,18 @@ export class BranchesService {
 
   constructor(
     @Inject(BRANCHES_REPOSITORY) private readonly repository: IBranchesRepository,
-    @Inject(USER_SESSION) private readonly userSession: UserSession | null,
+    private readonly session: SessionContextService,
   ) {}
-
-  private validateSession(): { tenant: string; branchId: number | null } {
-    if (!this.userSession || !this.userSession.tenant_id) {
-      throw new UnauthorizedException('No hay empresa seleccionada en la sesión');
-    }
-    return {
-      tenant: this.userSession.tenant_id,
-      branchId: this.userSession.branch_id || null,
-    };
-  }
 
   async getBranches(): Promise<BranchItem[]> {
     this.logger.log('[getBranches] Obteniendo sucursales');
-    const { tenant } = this.validateSession();
+    const { tenant } = this.session.getValidatedSession();
     return this.repository.getBranches(tenant);
   }
 
   async createBranch(dto: CreateBranchDto): Promise<BranchResponse> {
     this.logger.log(`[createBranch] Creando sucursal: ${dto.name}`);
-    const { tenant } = this.validateSession();
+    const { tenant } = this.session.getValidatedSession();
 
     if (!dto.name || dto.name.trim().length < 2) {
       throw new BadRequestException('El nombre de la sucursal debe tener al menos 2 caracteres');
@@ -42,7 +32,7 @@ export class BranchesService {
 
   async updateBranch(branchId: number, dto: UpdateBranchDto): Promise<BranchResponse> {
     this.logger.log(`[updateBranch] Editando sucursal ${branchId}`);
-    const { tenant } = this.validateSession();
+    const { tenant } = this.session.getValidatedSession();
 
     if (dto.name !== undefined && dto.name.trim().length < 2) {
       throw new BadRequestException('El nombre de la sucursal debe tener al menos 2 caracteres');
@@ -61,13 +51,13 @@ export class BranchesService {
 
   async getBranchUsers(branchId: number): Promise<BranchUserItem[]> {
     this.logger.log(`[getBranchUsers] Obteniendo usuarios de sucursal ${branchId}`);
-    const { tenant } = this.validateSession();
+    const { tenant } = this.session.getValidatedSession();
     return this.repository.getBranchUsers(tenant, branchId);
   }
 
   async updateBranchUser(branchId: number, userId: number, dto: UpdateBranchUserDto): Promise<BranchResponse> {
     this.logger.log(`[updateBranchUser] Actualizando usuario ${userId} en sucursal ${branchId}`);
-    const { tenant } = this.validateSession();
+    const { tenant } = this.session.getValidatedSession();
 
     await this.repository.updateBranchUser(
       tenant,
@@ -81,21 +71,21 @@ export class BranchesService {
 
   async addUserToBranch(branchId: number, userId: number): Promise<BranchResponse> {
     this.logger.log(`[addUserToBranch] Agregando usuario ${userId} a sucursal ${branchId}`);
-    const { tenant } = this.validateSession();
+    const { tenant } = this.session.getValidatedSession();
     await this.repository.addUserToBranch(tenant, branchId, userId);
     return { message: 'Usuario agregado a la sucursal' };
   }
 
   async setMainBranch(branchId: number): Promise<BranchResponse> {
     this.logger.log(`[setMainBranch] Cambiando sede principal a ${branchId}`);
-    const { tenant } = this.validateSession();
+    const { tenant } = this.session.getValidatedSession();
     await this.repository.setMainBranch(tenant, branchId);
     return { message: 'Sede principal actualizada' };
   }
 
   async removeUserFromBranch(branchId: number, userId: number): Promise<BranchResponse> {
     this.logger.log(`[removeUserFromBranch] Eliminando usuario ${userId} de sucursal ${branchId}`);
-    const { tenant } = this.validateSession();
+    const { tenant } = this.session.getValidatedSession();
     await this.repository.removeUserFromBranch(tenant, branchId, userId);
     return { message: 'Usuario eliminado de la sucursal' };
   }

@@ -158,27 +158,47 @@ INSERT INTO "CONFIG_MAIN".page (slug, module, name, url, type_id, parent_id, acc
                     (SELECT id FROM "CONFIG_MAIN".page WHERE slug = 'settings'),
                     (SELECT id FROM "CONFIG_MAIN".access_rule WHERE access_key = 'prescription'),
                     'global',100,true);
+                
+                INSERT INTO "CONFIG_MAIN".page_company_type (page_id, company_type_id) VALUES
+                ((select id from "CONFIG_MAIN".page  where slug ='prescription'), (select id from "CONFIG_MAIN".company_type where "name" ='Clínica Veterinaria'));
 
-         -- =====================================================================
+    --TENGO QUE REVISAR EL ECHO DE PODER HACER QUE UNA PAGINA SEA EXPLUSIVA PARA SIERTAS EMPRESAS
+        -- =====================================================================
         -- NIVEL 2 — [accesos Globales] [global]
         -- =====================================================================
            
             -- access_rule de la página global-access
-            INSERT INTO "CONFIG_MAIN".access_rule (access_key, description, parent_rule_id) VALUES
-                ('globalAccess', 'Administración de accesos globales', NULL);
+        INSERT INTO "CONFIG_MAIN".access_rule (access_key, description, parent_rule_id) VALUES
+            ('globalAccess', 'Administración de accesos globales', NULL);
 
-            INSERT INTO "CONFIG_MAIN".page (slug, module, name, url, type_id, parent_id, access_id, scope_type, "order", active) VALUES
-                ( 'global-access',
-                'globalAccess',
-                'Accesos Globales',
-                'global-access',
-                (SELECT id FROM "CONFIG_MAIN".page_type WHERE name = 'module'),
-                (SELECT id FROM "CONFIG_MAIN".page WHERE slug = 'settings'),
-                (SELECT id FROM "CONFIG_MAIN".access_rule WHERE access_key = 'globalAccess'),
-                'global',
-                650,
+        INSERT INTO "CONFIG_MAIN".page (slug, module, name, url, type_id, parent_id, access_id, scope_type, "order", active) VALUES
+            ( 'global-access',
+            'globalAccess',
+            'Accesos Globales',
+            'global-access',
+            (SELECT id FROM "CONFIG_MAIN".page_type WHERE name = 'module'),
+            (SELECT id FROM "CONFIG_MAIN".page WHERE slug = 'settings'),
+            (SELECT id FROM "CONFIG_MAIN".access_rule WHERE access_key = 'globalAccess'),
+            'global',
+            650,
             true);
+        -- =====================================================================
+        -- NIVEL 2 — [mi firma] [global]
+        -- =====================================================================
 
+        INSERT INTO "CONFIG_MAIN".access_rule (access_key, description, parent_rule_id) VALUES
+            ('doctor-signature', 'Administración mi firma digital', NULL);
+
+        INSERT INTO "CONFIG_MAIN".page (slug, module, name, url, type_id, parent_id, access_id, scope_type, "order", active) VALUES
+            ( 'doctor-signature', 'doctorSignature', 'Mi Firma', 'doctor-signature',
+            (SELECT id FROM "CONFIG_MAIN".page_type WHERE name = 'module'),
+            (SELECT id FROM "CONFIG_MAIN".page WHERE slug = 'settings'),
+            (SELECT id FROM "CONFIG_MAIN".access_rule WHERE access_key = 'doctor-signature'),
+            'global',
+            700, true);
+        --se agrega acceso a pagina de mi firma por ahora solo a veterinaria
+        INSERT INTO "CONFIG_MAIN".page_company_type (page_id, company_type_id) VALUES
+        ((select id from "CONFIG_MAIN".page  where slug ='doctor-signature'), (select id from "CONFIG_MAIN".company_type where "name" ='Clínica Veterinaria'));
 
 -- =====================================================================
 -- NIVEL 1 — VENTAS (label contenedor)

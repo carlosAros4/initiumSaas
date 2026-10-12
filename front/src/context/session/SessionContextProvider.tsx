@@ -1,10 +1,10 @@
 import { useState, type ReactNode } from 'react';
 import { SessionContext } from './SessionContext';
-import type { Branch, ClienteData, Company, user } from '../../types/session';
+import type { Branch, ClienteData, Company } from '../../types/session';
 import type { modulesRouter, PageTree } from '../../types/page-tree';
 
 export function SessionProvider({ children }: { children: ReactNode }) {
-  const [cliente, setCliente] = useState<user | null>(null);
+  const [cliente, setCliente] = useState<ClienteData | null>(null);
   const [companies, setCompanies] = useState<Company[] | null>(null);
   const [companySelect, setCompanySelect] = useState<Company | null>(null);
   const [branches, setBranchesState] = useState<Branch[] | null>(null);
@@ -15,13 +15,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [sessionKey, setSessionKey] = useState(0);
 
   function setDataCliente(data: ClienteData) {
-    setCliente({
-      blocked: data.blocked,
-      verified: data.verified,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-    });
+    setCliente(data);
     if (data.companies && data.companies.length != 0) {
       setCompanies(data.companies);
     }

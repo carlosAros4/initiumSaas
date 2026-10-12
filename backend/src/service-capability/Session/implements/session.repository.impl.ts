@@ -180,8 +180,8 @@ export class SessionImpl implements ISessionRepository {
 
   // ─── Page tree & access rules ───
 
-  async getPageTree(): Promise<PageTree[]> {
-    this.logger.log('[getPageTree] Obteniendo árbol de páginas');
+  async getPageTree(tenant: string): Promise<PageTree[]> {
+    this.logger.log(`[getPageTree] Obteniendo árbol de páginas — tenant: ${tenant}`);
 
     const result = await this.pool.query(
       `SELECT 
@@ -200,7 +200,22 @@ export class SessionImpl implements ISessionRepository {
       INNER JOIN "CONFIG_MAIN".page_type pt ON pt.id = p.type_id
       LEFT JOIN "CONFIG_MAIN".access_rule ar ON ar.id = p.access_id
       WHERE p.active = true
+        AND (
+          -- Página transversal: sin asociación a tipos de empresa.
+          NOT EXISTS (
+            SELECT 1 FROM "CONFIG_MAIN".page_company_type pct
+            WHERE pct.page_id = p.id
+          )
+          -- Página exclusiva: pertenece al tipo de empresa del tenant actual.
+          OR EXISTS (
+            SELECT 1
+            FROM "CONFIG_MAIN".page_company_type pct
+            INNER JOIN "CONFIG_MAIN".company c ON c.type_id = pct.company_type_id
+            WHERE pct.page_id = p.id AND c.tenant_id = $1
+          )
+        )
       ORDER BY p."order"`,
+      [tenant],
     );
 
     const pages = result.rows;

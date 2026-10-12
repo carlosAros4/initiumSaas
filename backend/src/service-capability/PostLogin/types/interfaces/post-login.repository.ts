@@ -15,7 +15,7 @@ export interface UserData {
 export interface IPostLoginRepository {
   getCompanies(rut: string, dv: string): Promise<Company[]>;
   getUserData(rut: string, dv: string): Promise<UserData>;
-  getPageTree(): Promise<PageTree>;
+  getPageTree(tenant: string): Promise<PageTree>;
   getAccessRuleUser(tenant: string, branchId: number | null): Promise<string[]>;
   getUserBranches(tenant: string): Promise<Branch[]>;
 }

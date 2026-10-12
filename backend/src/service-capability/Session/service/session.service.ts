@@ -158,7 +158,7 @@ export class SessionService {
     }
 
     // Obtener árbol de páginas y permisos (filtrados por branch si hay)
-    const pageTree = await this.repository.getPageTree();
+    const pageTree = await this.repository.getPageTree(company.tenant_id);
     const accessRuleClient = await this.repository.getAccessRuleUser(
       company.tenant_id,
       selectedBranch?.id || null,
@@ -225,7 +225,7 @@ export class SessionService {
     await this.redis.set('branchSession', branch);
 
     // Recalcular permisos filtrados por la nueva sucursal
-    const pageTree = await this.repository.getPageTree();
+    const pageTree = await this.repository.getPageTree(tenant);
     const accessRuleClient = await this.repository.getAccessRuleUser(tenant, branch.id);
     const filteredPageTree = this.filterPageTree(pageTree, accessRuleClient);
 

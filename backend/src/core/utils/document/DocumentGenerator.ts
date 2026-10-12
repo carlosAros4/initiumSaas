@@ -1,7 +1,7 @@
-import { Inject, Injectable, Logger, NotFoundException, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
 import { Pool } from 'pg';
 import { PG_POOL } from '../../database/database.module';
-import { USER_SESSION, UserSession } from '../../providers/user-session';
+import { SessionContextService } from '../../providers/user-session';
 import { generatePDF, paperFormart } from './index/sectionPDF';
 import { generateExcel } from './index/sectionExcel';
 
@@ -39,16 +39,8 @@ export class DocumentGenerator {
 
   constructor(
     @Inject(PG_POOL) private readonly pool: Pool,
-    @Inject(USER_SESSION) private readonly userSession: UserSession | null,
+    private readonly session: SessionContextService,
   ) { }
-
-  /** obtener tennant */
-  private getTenant(): string {
-    if (!this.userSession || !this.userSession.tenant_id) {
-      throw new UnauthorizedException('No hay empresa seleccionada en la sesión');
-    }
-    return this.userSession.tenant_id;
-  }
 
   async createDocument(input: RequestDocument): Promise<Buffer> {
     const { code, data, type } = input;
@@ -73,7 +65,7 @@ export class DocumentGenerator {
    * Obtiene una plantilla
    */
   private async getTemplate(code: string, type: TypeDocument): Promise<Document> {
-    const tenant = this.getTenant();
+    const tenant = this.session.getTenant();
     this.logger.log(`[getTemplate] Obteniendo plantilla "${code}" — tenant: ${tenant}`);
 
     const result = await this.pool.query<DocumentTemplate>(

@@ -1,7 +1,7 @@
-import { Inject, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Pool } from 'pg';
 import { PG_POOL } from '../../../core/database/database.module';
-import { USER_SESSION, UserSession } from '../../../core/providers/user-session';
+import { SessionContextService } from '../../../core/providers/user-session';
 import {
   IPrescriptionRepository,
   PrescriptionInitRow,
@@ -19,19 +19,11 @@ export class PrescriptionRepositoryImpl implements IPrescriptionRepository {
 
   constructor(
     @Inject(PG_POOL) private readonly pool: Pool,
-    @Inject(USER_SESSION) private readonly userSession: UserSession | null,
+    private readonly session: SessionContextService,
   ) {}
 
-  /** Resuelve el tenant desde la sesión del usuario. */
-  private getTenant(): string {
-    if (!this.userSession || !this.userSession.tenant_id) {
-      throw new UnauthorizedException('No hay empresa seleccionada en la sesión');
-    }
-    return this.userSession.tenant_id;
-  }
-
   async downloadTemplate(code: string): Promise<PrescriptionTemplateRow | null> {
-    const tenant = this.getTenant();
+    const tenant = this.session.getTenant();
     this.logger.log(`[downloadTemplate] code: ${code} — tenant: ${tenant}`);
 
     const result = await this.pool.query<PrescriptionTemplateRow>(
@@ -45,7 +37,7 @@ export class PrescriptionRepositoryImpl implements IPrescriptionRepository {
   }
 
   async getInit(code: string): Promise<PrescriptionInitRow | null> {
-    const tenant = this.getTenant();
+    const tenant = this.session.getTenant();
     this.logger.log(`[getInit] code: ${code} — tenant: ${tenant}`);
 
     const result = await this.pool.query<PrescriptionInitRow>(
@@ -67,7 +59,7 @@ export class PrescriptionRepositoryImpl implements IPrescriptionRepository {
     content?: string,
     paperformat?: paperFormart,
   ): Promise<boolean> {
-    const tenant = this.getTenant();
+    const tenant = this.session.getTenant();
     this.logger.log(`[uploadTemplate] code: ${code} — tenant: ${tenant}`);
 
     const sets: string[] = [];
@@ -104,7 +96,7 @@ export class PrescriptionRepositoryImpl implements IPrescriptionRepository {
    * fila existente a los valores por defecto. Devuelve true si actualizó algo.
    */
   async resetTemplate(code: string): Promise<boolean> {
-    const tenant = this.getTenant();
+    const tenant = this.session.getTenant();
     this.logger.log(`[resetTemplate] code: ${code} — tenant: ${tenant}`);
 
     const result = await this.pool.query(

@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, UnauthorizedException, BadRequestException, ConflictException } from '@nestjs/common';
+import { Inject, Injectable, Logger, BadRequestException, ConflictException } from '@nestjs/common';
 import {
   IDocumentTemplateRepository,
   DOCUMENT_TEMPLATE_REPOSITORY,
@@ -9,7 +9,7 @@ import {
   DocumentTemplateItem,
   DocumentTemplateResponse,
 } from '../types/dto/document-template.dto';
-import { USER_SESSION, UserSession } from 'src/core/providers/user-session';
+import { SessionContextService } from 'src/core/providers/user-session';
 
 @Injectable()
 export class DocumentTemplateService {
@@ -17,15 +17,8 @@ export class DocumentTemplateService {
 
   constructor(
     @Inject(DOCUMENT_TEMPLATE_REPOSITORY) private readonly repository: IDocumentTemplateRepository,
-    @Inject(USER_SESSION) private readonly userSession: UserSession | null,
+    private readonly session: SessionContextService,
   ) {}
-
-  private getTenant(): string {
-    if (!this.userSession || !this.userSession.tenant_id) {
-      throw new UnauthorizedException('No hay empresa seleccionada en la sesión');
-    }
-    return this.userSession.tenant_id;
-  }
 
   /** Decodifica y valida un .xlsx en base64. */
   private decodeXlsx(fileBase64: string): Buffer {
@@ -48,13 +41,13 @@ export class DocumentTemplateService {
 
   async listTemplates(): Promise<DocumentTemplateItem[]> {
     this.logger.log('[listTemplates] Listando plantillas');
-    const tenant = this.getTenant();
+    const tenant = this.session.getTenant();
     return this.repository.listTemplates(tenant);
   }
 
   async createTemplate(dto: CreateDocumentTemplateDto): Promise<DocumentTemplateResponse> {
     this.logger.log(`[createTemplate] code: ${dto.code}, type: ${dto.type}`);
-    const tenant = this.getTenant();
+    const tenant = this.session.getTenant();
 
     if (!dto.code || dto.code.trim().length < 2) {
       throw new BadRequestException('El código debe tener al menos 2 caracteres');
@@ -89,7 +82,7 @@ export class DocumentTemplateService {
 
   async updateTemplate(id: number, dto: UpdateDocumentTemplateDto): Promise<DocumentTemplateResponse> {
     this.logger.log(`[updateTemplate] id: ${id}`);
-    const tenant = this.getTenant();
+    const tenant = this.session.getTenant();
 
     const file = dto.fileBase64 ? this.decodeXlsx(dto.fileBase64) : null;
 
@@ -104,7 +97,7 @@ export class DocumentTemplateService {
 
   async deleteTemplate(id: number): Promise<DocumentTemplateResponse> {
     this.logger.log(`[deleteTemplate] id: ${id}`);
-    const tenant = this.getTenant();
+    const tenant = this.session.getTenant();
     await this.repository.deleteTemplate(tenant, id);
     return { message: 'Plantilla eliminada exitosamente' };
   }

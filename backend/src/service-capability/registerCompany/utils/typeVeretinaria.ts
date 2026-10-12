@@ -2,7 +2,7 @@
 export const  INIT_VETERINARIA_SQL =`
 INSERT INTO "__SCHEMA__".document_template
 ( code, description, "type","paperformat", "content", file, created_at, updated_at)
-VALUES( 'receta-digital', 'receta digital para animales', 'pdf','A4', '<!DOCTYPE html>
+VALUES( 'receta-digital', 'receta digital para animales', 'pdf','a4', '<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">

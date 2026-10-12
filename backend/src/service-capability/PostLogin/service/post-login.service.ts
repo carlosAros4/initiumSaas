@@ -91,7 +91,7 @@ export class PostLoginService {
       }
 
       // Obtener árbol de páginas y permisos
-      const pageTree = await this.repository.getPageTree();
+      const pageTree = await this.repository.getPageTree(favoriteCompany.tenant_id);
       const accessRuleClient = await this.repository.getAccessRuleUser(
         favoriteCompany.tenant_id,
         selectedBranch?.id || null,

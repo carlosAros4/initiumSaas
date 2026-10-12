@@ -9,7 +9,7 @@ export interface ISessionRepository {
   getCompanies(id: number): Promise<Company | null>;
   insertFavorite(id: number): Promise<boolean>;
   resetFavorite(): Promise<boolean>;
-  getPageTree(): Promise<PageTree[]>;
+  getPageTree(tenant: string): Promise<PageTree[]>;
   getAccessRuleUser(tenant: string, branchId: number | null): Promise<string[]>;
   getUserBranches(tenant: string): Promise<Branch[]>;
   getBranch(tenant: string, branchId: number): Promise<Branch | null>;
