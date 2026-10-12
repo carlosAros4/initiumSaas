@@ -1,9 +1,9 @@
 import { Inject, Injectable, Logger, BadRequestException } from '@nestjs/common';
-import {
-  DOCUMENT_TEMPLATE_REPOSITORY,
-} from '../types/interfaces/document-template.repository';
 
-import { IDoctorSignatureRepository } from '../types/interfaces/doctorSignature.repository';
+import {
+  DOCTORSIGNATURE_REPOSITORY,
+  IDoctorSignatureRepository,
+} from '../types/interfaces/doctorSignature.repository';
 import { UpsertDoctorSignatureRequest } from '../types/dto/doctor-signature.dto';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class DoctorSignatureService {
   private readonly logger = new Logger(DoctorSignatureService.name);
 
   constructor(
-    @Inject(DOCUMENT_TEMPLATE_REPOSITORY) private readonly repository: IDoctorSignatureRepository,
+    @Inject(DOCTORSIGNATURE_REPOSITORY) private readonly repository: IDoctorSignatureRepository,
      
   ) {}
 

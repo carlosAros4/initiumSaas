@@ -18,7 +18,7 @@ export class DoctorSignatureRepositoryImpl implements IDoctorSignatureRepository
  
   async getDoctorSignature(): Promise<DoctorSignatureData | null> {
     const tenant = this.session.getTenant();
-    const rut = this.session.getRut;
+    const rut = this.session.getRut();
 
     const result = await this.pool.query(
       `SELECT * FROM "${tenant}".doctor_signature
@@ -37,7 +37,7 @@ export class DoctorSignatureRepositoryImpl implements IDoctorSignatureRepository
 
   async upsertDoctorSignature(data: DoctorSignatureData) {
     const tenant = this.session.getTenant();
-    const rut = this.session.getRut;
+    const rut = this.session.getRut();
 
     this.logger.log(
       `[upsertDoctorSignature] tenant: ${tenant} — user: ${rut}`,

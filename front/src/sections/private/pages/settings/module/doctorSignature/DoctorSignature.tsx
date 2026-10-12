@@ -25,10 +25,9 @@ export default function DoctorSignature() {
   const [refreshKey, setRefreshKey] = useState(0);
   const { data, isLoading } = useFetch<DoctorSignature | null>({
     clientType: 'InitiumSaaS-Private',
-    path: `prescriptions/doctor-signature?_r=${refreshKey}`,
+    path: `settings/doctor-signature?_r=${refreshKey}`,
     method: 'GET',
   });
-console.log(cliente)
   const [form, setForm] = useState({
     professionalRegistry: '',
     specialty: '',
@@ -38,11 +37,9 @@ console.log(cliente)
   const [success, setSuccess] = useState('');
   const [saving, setSaving] = useState(false);
 
-  // Nombre y RUT del usuario conectado (solo lectura). El backend los entrega.
-  const displayFullName = `${cliente.firstName} ${cliente.lastName}`
-  const displayRut =`${formatRutDv(cliente.rut,cliente.dv)}`
 
   useEffect(() => {
+    console.log(data)
     if (data) {
       setForm({
         professionalRegistry: data.professionalRegistry ?? '',
@@ -81,7 +78,7 @@ console.log(cliente)
     try {
       await fetcher({
         clientType: 'InitiumSaaS-Private',
-        path: 'prescriptions/doctor-signature',
+        path: 'settings/doctor-signature',
         method: 'POST',
         body: {
           professionalRegistry: form.professionalRegistry.trim(),
@@ -114,11 +111,11 @@ console.log(cliente)
         <div className={styles.grid}>
           <div className={styles.fieldGroup}>
             <label className={styles.label}>Nombre completo</label>
-            <input className={styles.input} value={displayFullName} readOnly disabled />
+            <input className={styles.input} value={`${cliente.firstName} ${cliente.lastName}`} readOnly disabled />
           </div>
           <div className={styles.fieldGroup}>
             <label className={styles.label}>RUT</label>
-            <input className={styles.input} value={displayRut} readOnly disabled />
+            <input className={styles.input} value={formatRutDv(cliente.rut,cliente.dv)} readOnly disabled />
           </div>
           <div className={styles.fieldGroup}>
             <label className={styles.label}>Registro profesional *</label>

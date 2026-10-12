@@ -1,5 +1,13 @@
 
 export const  INIT_VETERINARIA_SQL =`
+CREATE TABLE "NCCVET_20261012002715".doctor_signature (
+    id                    SERIAL PRIMARY KEY,
+    rut                   VARCHAR(100) NOT null UNIQUE,
+    professional_registry VARCHAR(120) NOT NULL,
+    specialty             VARCHAR(150),
+    signature_image       TEXT
+);
+
 INSERT INTO "__SCHEMA__".document_template
 ( code, description, "type","paperformat", "content", file, created_at, updated_at)
 VALUES( 'receta-digital', 'receta digital para animales', 'pdf','a4', '<!DOCTYPE html>
