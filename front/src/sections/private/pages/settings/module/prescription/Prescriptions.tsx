@@ -283,7 +283,7 @@ export default function Prescriptions() {
 
         {templateAlert && (
           <div className={s.alertWrap}>
-            <AlertInitium variant={templateAlert.variant} message={templateAlert.text} />
+            <AlertInitium variant={templateAlert.variant} message={templateAlert.text} onClose={() => setTemplateAlert(null)} />
           </div>
         )}
       </section>
@@ -444,7 +444,7 @@ export default function Prescriptions() {
 
         {alertData && (
           <div className={s.alertWrap}>
-            <AlertInitium variant={alertData.variant} message={alertData.text} />
+            <AlertInitium variant={alertData.variant} message={alertData.text} onClose={() => setAlertData(null)} />
           </div>
         )}
       </section>

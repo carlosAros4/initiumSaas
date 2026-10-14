@@ -110,7 +110,7 @@ export default function DoctorSignature() {
 
       <div className={styles.card}>
         {error && <AlertInitium variant="error" message={error} />}
-        {success && <AlertInitium variant="success" message={success} />}
+        {success && <AlertInitium variant="success" message={success} onClose={() => setSuccess('')} />}
 
         <div className={styles.grid}>
           <div className={styles.fieldGroup}>

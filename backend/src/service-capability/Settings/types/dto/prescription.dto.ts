@@ -101,7 +101,7 @@ export class CreatePrescriptionDto {
   ): Record<string, unknown> {
     return {
       medico_nombre: `${user.firstName} ${user.lastName}`,
-      medico_profecion: signature.professionalRegistry ?? '',
+      medico_profesion: signature.professionalRegistry ?? '',
       medico_especialidad: signature.specialty ?? '',
       medico_rut: formatRut(user.rut, user.dv),
       medico_firma: signature.signatureImage ?? '',
