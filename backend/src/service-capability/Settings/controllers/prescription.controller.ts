@@ -5,20 +5,14 @@ import { CreatePrescriptionDto, UploadPrescriptionTemplateDto } from '../types/d
 import { PrescriptionInitRow } from '../types/interfaces/prescription.repository';
 import { Response } from 'express';
 import { DocumentGenerator } from 'src/core/utils/document/DocumentGenerator';
-import { RedisService } from 'src/core/redis';
-import { DataCliente } from 'src/service-capability/PostLogin/types/dto/data-cliente';
-import { formatRut } from 'src/core/utils/rut.utils';
 
 @ApiTags('settings')
 @Controller({ path: 'settings/prescription' })
 export class PrescriptionController {
   private readonly logger = new Logger(PrescriptionController.name);
 
-  constructor(private readonly prescriptionService: PrescriptionService,
-    //estos 2 item solo se estan utilizando para generar el preview ya que el metodo principal para 
-    //la creacion del documento tiene mas logica para agregarlo al perfil.
-    private readonly documentGenerator: DocumentGenerator,
-       private readonly redis: RedisService,
+  constructor(private readonly prescriptionService: PrescriptionService
+     
   ) {}
 
   @Get('init')
@@ -87,39 +81,10 @@ export class PrescriptionController {
   @ApiResponse({ status: 201, description: 'PDF generado exitosamente' })
   async preview(@Body() body: CreatePrescriptionDto, @Res() response: Response) {
 
-      const user = await this.redis.get<DataCliente>('data_cliente');
-
-      const data = {
-        medico_nombre:`${user.firstName} ${user.lastName}` ,
-        medico_especialidad:'',
-        medico_rut:formatRut(user.rut,user.dv) ,
-        medico_firma:'',
-        medico_email:user.email ,
-
-        paciente_nombre:body.nombrePaciente,
-        paciente_especie:body.especie,
-        paciente_raza:body.raza,
-        paciente_sexo:body.sexo,
-        paciente_edad:body.edad,
-        paciente_peso:body.peso,
-        paciente_tutor:body.tutor,
-        paciente_telefono:body.telefono,
-        medicamentos:body.medicamentos?.map((map)=>{return {
-            medicamento_nombre:map.nombre,
-            medicamento_dosis:map.dosis,
-            medicamento_frecuencia:map.frecuencia
-        }})
-
-        
-      } 
-    const pdf = await this.documentGenerator.createDocument({
-        type:'PDF',
-        code: 'receta-digital',
-        data,
-      });
+    const pdf = await this.prescriptionService.createPrescription(body,true);
     response.set({
       'Content-Type': 'application/pdf',
-      'Content-Disposition': 'attachment; filename="prescription.pdf"',
+      'Content-Disposition': 'attachment; filename="preview_receta.pdf"',
       'Content-Length': pdf.length,
     });
 
@@ -136,9 +101,10 @@ export class PrescriptionController {
   async createPrescriptionPdf(@Body() body: CreatePrescriptionDto, @Res() response: Response) {
     const pdf = await this.prescriptionService.createPrescription(body);
 
+    const name = body.nombrePaciente
     response.set({
       'Content-Type': 'application/pdf',
-      'Content-Disposition': 'attachment; filename="prescription.pdf"',
+      'Content-Disposition':`attachment; filename="${name}.pdf"`,
       'Content-Length': pdf.length,
     });
 

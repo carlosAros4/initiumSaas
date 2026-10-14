@@ -1,10 +1,11 @@
 
 export const  INIT_VETERINARIA_SQL =`
-CREATE TABLE "NCCVET_20261012002715".doctor_signature (
+CREATE TABLE "__SCHEMA__".doctor_signature (
     id                    SERIAL PRIMARY KEY,
     rut                   VARCHAR(100) NOT null UNIQUE,
-    professional_registry VARCHAR(120) NOT NULL,
+    professional_registry VARCHAR(120),
     specialty             VARCHAR(150),
+    rcmv                  INTEGER,
     signature_image       TEXT
 );
 

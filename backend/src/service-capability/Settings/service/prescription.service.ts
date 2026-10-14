@@ -13,6 +13,9 @@ import {
   PrescriptionInitRow,
   PrescriptionTemplateRow,
 } from '../types/interfaces/prescription.repository';
+import { RedisService } from 'src/core/redis';
+import { DataCliente } from 'src/service-capability/PostLogin/types/dto/data-cliente';
+import { DOCTORSIGNATURE_REPOSITORY, IDoctorSignatureRepository } from '../types/interfaces/doctorSignature.repository';
 
 export const PRESCRIPTION_TEMPLATE_CODE = 'receta-digital';
 
@@ -23,35 +26,24 @@ export class PrescriptionService {
   constructor(
     private readonly documentGenerator: DocumentGenerator,
     @Inject(PRESCRIPTION_REPOSITORY) private readonly repository: IPrescriptionRepository,
+    @Inject(DOCTORSIGNATURE_REPOSITORY) private readonly repoSignature: IDoctorSignatureRepository,
+    private readonly redis: RedisService,
   ) {}
 
-  /** Mapea el DTO al objeto de datos que consume la plantilla (Handlebars / Excel). */
-  private buildTemplateData(dto: CreatePrescriptionDto): Record<string, unknown> {
-    return {
-      nombrePaciente: dto.nombrePaciente,
-      raza: dto.raza ?? '',
-      especie: dto.especie ?? '',
-      sexo: dto.sexo ?? '',
-      edad: dto.edad ?? '',
-      peso: dto.peso ?? '',
-      tutor: dto.tutor ?? '',
-      telefono: dto.telefono ?? '',
-      fecha: new Date().toLocaleDateString('es-CL'),
-      medicamentos: (dto.medicamentos ?? []).map((m) => ({
-        nombre: m.nombre,
-        dosis: m.dosis,
-        frecuencia: m.frecuencia,
-      })),
-    };
-  }
+  async createPrescription(dto: CreatePrescriptionDto,preview?:boolean): Promise<Buffer> {
 
-  async createPrescription(dto: CreatePrescriptionDto): Promise<Buffer> {
+    //obtenemos los datos basicos del cliente 
+    const user = await this.redis.get<DataCliente>('data_cliente');
+    //obtener firma y especialidad
+    const signature = await this.repoSignature.getDoctorSignature();
+
     this.logger.log('[createPrescription] Generando PDF de receta');
     return this.documentGenerator.createDocument({
       type: 'PDF',
       code: PRESCRIPTION_TEMPLATE_CODE,
-      data: this.buildTemplateData(dto),
-    });
+      data: dto.buildDataPrescription(user, signature),
+      
+    },preview);
   }
 
   async downloadTemplate(): Promise<PrescriptionTemplateRow> {

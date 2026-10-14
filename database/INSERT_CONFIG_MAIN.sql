@@ -100,8 +100,8 @@ INSERT INTO "CONFIG_MAIN".page (slug, module, name, url, type_id, parent_id, acc
         -- regla puede quedar como raíz: el backend la ubicará como hija del
         -- acceso de 'settings' porque su página cuelga de la página settings.
         -- =====================================================================
-         INSERT INTO "CONFIG_MAIN".access_rule (access_key, description, parent_rule_id) VALUES
-        ('settingsAccessBranch', 'Acceso a Accesos de Sucursal', null);
+         INSERT INTO "CONFIG_MAIN".access_rule (access_key, descripti|on, parent_rule_id) VALUES
+        ('settingsAccessBranch', 'Administracion de Sucursal', null);
         INSERT INTO "CONFIG_MAIN".page (slug, module, name, url, type_id, parent_id, access_id, scope_type, "order", active) VALUES
             ( 'settings.access','access','Accesos Sucursal','access-branch',
             (SELECT id FROM "CONFIG_MAIN".page_type WHERE name = 'module'),

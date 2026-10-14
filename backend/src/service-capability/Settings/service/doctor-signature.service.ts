@@ -32,6 +32,7 @@ export class DoctorSignatureService {
       professionalRegistry: data.professionalRegistry.trim(),
       specialty: data.specialty ?? null,
       signatureImage: data.signatureImage ?? null,
+      rcmv:data.rcmv ?? null
     });
   }
 

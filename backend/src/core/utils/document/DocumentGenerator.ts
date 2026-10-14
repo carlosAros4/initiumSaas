@@ -42,7 +42,7 @@ export class DocumentGenerator {
     private readonly session: SessionContextService,
   ) { }
 
-  async createDocument(input: RequestDocument): Promise<Buffer> {
+  async createDocument(input: RequestDocument,preview?:boolean): Promise<Buffer> {
     const { code, data, type } = input;
     if (!code || !data) throw new BadRequestException('parametros de entrada sin ');
 
@@ -52,7 +52,7 @@ export class DocumentGenerator {
     if (type === 'EXCEL') {
       return await generateExcel(data, template.plantilla);
     } else {
-      return await generatePDF(data, template.plantilla,template.format);
+      return await generatePDF(data, template.plantilla, template.format, preview);
     }
     } catch (error) {
       this.logger.error(`[generatePDF] documento template no encontrado para [${code}]`);

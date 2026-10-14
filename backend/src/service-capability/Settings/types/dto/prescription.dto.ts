@@ -10,6 +10,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { paperFormart } from '../../../../core/utils/document/index/sectionPDF';
+import { formatRut } from '../../../../core/utils/rut.utils';
 
 /** Un medicamento dentro de la receta. */
 export class PrescriptionMedicationDto {
@@ -84,6 +85,45 @@ export class CreatePrescriptionDto {
   @ValidateNested({ each: true })
   @Type(() => PrescriptionMedicationDto)
   medicamentos: PrescriptionMedicationDto[];
+
+    // ─── Tutor ───
+  @ApiPropertyOptional({ description: 'diagnostico', example: '' })
+  @IsOptional()
+  @IsString()
+  diagnostico?: string;
+  /**
+   * Construye el objeto de datos usado para renderizar la plantilla de receta,
+   * combinando los datos del paciente con los del médico (usuario + firma).
+   */
+  buildDataPrescription(
+    user: { firstName: string; lastName: string; rut: string; dv: string; email: string },
+    signature: { professionalRegistry?: string; specialty?: string; signatureImage?: string ,rcmv:number},
+  ): Record<string, unknown> {
+    return {
+      medico_nombre: `${user.firstName} ${user.lastName}`,
+      medico_profecion: signature.professionalRegistry ?? '',
+      medico_especialidad: signature.specialty ?? '',
+      medico_rut: formatRut(user.rut, user.dv),
+      medico_firma: signature.signatureImage ?? '',
+      medico_email: user.email,
+      medico_rcmv:signature.rcmv,
+      paciente_nombre: this.nombrePaciente,
+      paciente_especie: this.especie,
+      paciente_raza: this.raza,
+      paciente_sexo: this.sexo,
+      paciente_edad: this.edad,
+      paciente_peso: this.peso,
+      paciente_tutor: this.tutor,
+      paciente_telefono: this.telefono,
+      fecha: new Date().toLocaleDateString('es-CL'),
+      diagnostico:this.diagnostico,
+      medicamentos: this.medicamentos?.map((map) => ({
+          medicamento_nombre: map.nombre,
+          medicamento_dosis: map.dosis,
+          medicamento_frecuencia: map.frecuencia,
+      })),
+    };
+  }
 }
 
 export interface PrescriptionResponse {

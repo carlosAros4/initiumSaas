@@ -5,7 +5,7 @@ import { useSession } from '../../../../../../hooks/useSession';
 import AlertInitium from '../../../../../transversal/ui/Alert/Alert';
 import Spinner from '../../../../../transversal/ui/Spinner/Spinner';
 import ButtonInitium from '../../../../../transversal/ui/Button/ButtonInitium';
-import { formatRut, formatRutDv } from '../../../../../../utils/rut';
+import { formatRutDv } from '../../../../../../utils/rut';
 
 interface DoctorSignature {
   id: number;
@@ -14,6 +14,7 @@ interface DoctorSignature {
   professionalRegistry: string;
   specialty: string | null;
   signatureImage: string | null;
+  rcmv:string | null
 }
 
 const ALLOWED_MIME = ['image/png', 'image/jpeg'];
@@ -31,6 +32,7 @@ export default function DoctorSignature() {
   const [form, setForm] = useState({
     professionalRegistry: '',
     specialty: '',
+    rcmv:'',
   });
   const [signatureImage, setSignatureImage] = useState<string | null>(null);
   const [error, setError] = useState('');
@@ -44,6 +46,7 @@ export default function DoctorSignature() {
       setForm({
         professionalRegistry: data.professionalRegistry ?? '',
         specialty: data.specialty ?? '',
+        rcmv:data.rcmv ?? ''
       });
       setSignatureImage(data.signatureImage ?? null);
     }
@@ -84,6 +87,7 @@ export default function DoctorSignature() {
           professionalRegistry: form.professionalRegistry.trim(),
           specialty: form.specialty.trim() || null,
           signatureImage: signatureImage,
+          rcmv:form.rcmv.trim() || null
         },
       });
       setSuccess('Firma y datos guardados correctamente.');
@@ -124,6 +128,15 @@ export default function DoctorSignature() {
           <div className={styles.fieldGroup}>
             <label className={styles.label}>Especialidad</label>
             <input className={styles.input} value={form.specialty} onChange={(e) => setField('specialty', e.target.value)} />
+          </div>
+          <div className={styles.fieldGroup}>
+            <label className={styles.label}>Codivo de Colmevet</label>
+            <input
+              className={styles.input}
+              value={form.rcmv}
+              inputMode="numeric"
+              onChange={(e) => setField('rcmv', e.target.value.replace(/\D/g, ''))}
+            />
           </div>
         </div>
 

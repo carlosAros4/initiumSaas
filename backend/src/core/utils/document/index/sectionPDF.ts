@@ -10,7 +10,7 @@ export  type paperFormart = 'letter'|'legal'|'tabloid'|'ledger'|'a0'|'a1'|'a2'|'
  * @param input.data arreglo de objetos para pasar a la plantilla
  * @returns Buffer con el contenido del PDF
  */
-export async function generatePDF(data: Record<string, unknown>, plantilla,format:paperFormart): Promise<Buffer> {
+export async function generatePDF(data: Record<string, unknown>, plantilla, format: paperFormart, preview?: boolean): Promise<Buffer> {
 
     // 1) Extrae el footer ANTES de Handlebars, para preservar {{number-page}}
     //    y {{total-page}} (que no están en `data` y Handlebars vaciaría).
@@ -19,7 +19,13 @@ export async function generatePDF(data: Record<string, unknown>, plantilla,forma
 
     // 2) Handlebars solo sobre el body (sin el footer).
     const templateGenerate = Handlebars.compile(bodyTemplate);
-    const html = templateGenerate(data);
+    let html = templateGenerate(data);
+
+    // 3) En modo preview se inyecta una marca de agua que identifica el
+    //    documento como una prueba no válida para presentar.
+    if (preview) {
+        html = injectWatermark(html);
+    }
 
     const browser = await puppeteer.launch({
         headless: true,
@@ -42,6 +48,51 @@ export async function generatePDF(data: Record<string, unknown>, plantilla,forma
     } finally {
         await browser.close();
     }
+}
+
+function injectWatermark(html: string): string {
+
+    const prewiewStyle = `
+    <style>
+      @media print {
+        .__preview-watermark { position: fixed; }
+      }
+      .__preview-watermark {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        pointer-events: none;
+        overflow: hidden;
+      }
+      .__preview-watermark span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-35deg);
+        white-space: nowrap;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 42px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: rgba(220, 38, 38, 0.09);
+        text-transform: uppercase;
+      }
+    </style>`;
+
+    const previewText = `<div class="__preview-watermark"><span>DOCUMENTO NO VÁLIDO</span></div>`;
+
+    // Si existe <body>, insertamos justo después de su apertura; de lo
+    // contrario anteponemos el overlay al inicio del documento.
+    if (/<body[^>]*>/i.test(html)) {
+        return html
+            .replace(/<\/head>/i, `${prewiewStyle}</head>`)
+            .replace(/(<body[^>]*>)/i, `$1${previewText}`);
+    }
+
+    return `${prewiewStyle}${previewText}${html}`;
 }
 
   /**

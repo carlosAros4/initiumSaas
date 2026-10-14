@@ -27,11 +27,12 @@ export class DoctorSignatureRepositoryImpl implements IDoctorSignatureRepository
     );
     if (result.rowCount === 0) return null;
 
-    const {professional_registry,specialty,signature_image} =  result.rows[0]
+    const {professional_registry,specialty,signature_image,rcmv} =  result.rows[0]
     return {
       professionalRegistry: professional_registry,
       specialty: specialty,
-      signatureImage: signature_image
+      signatureImage: signature_image,
+      rcmv
     };
   }
 
@@ -44,18 +45,20 @@ export class DoctorSignatureRepositoryImpl implements IDoctorSignatureRepository
     );
     await this.pool.query(
       `INSERT INTO "${tenant}".doctor_signature
-      (rut, professional_registry, specialty, signature_image)
-    VALUES ($1, $2, $3, $4)
+      (rut, professional_registry, specialty, signature_image,rcmv)
+    VALUES ($1, $2, $3, $4,$5)
     ON CONFLICT (rut)
     DO UPDATE SET
       professional_registry = EXCLUDED.professional_registry,
       specialty = EXCLUDED.specialty,
-      signature_image = EXCLUDED.signature_image;`,
+      signature_image = EXCLUDED.signature_image,
+      rcmv= EXCLUDED.rcmv;`,
       [
         rut,
         data.professionalRegistry,
         data.specialty ?? null,
         data.signatureImage ?? null,
+        data.rcmv ?? null
       ],
     );
   }

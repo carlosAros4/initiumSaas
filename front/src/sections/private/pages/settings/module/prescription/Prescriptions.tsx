@@ -25,6 +25,7 @@ interface RecetaForm {
   edad: string;
   peso: string;
   tutor: string;
+  diagnostico:string;
   telefono: string;
   medicamentos:Medication[]
 }
@@ -146,6 +147,7 @@ export default function Prescriptions() {
     especie:'Perro',
     raza:'mestizo',
     peso:'2.5 kilos',
+    diagnostico:'presenta dolor abdominal',
     sexo:'Macho',
     tutor: 'Juan Perez',
     telefono:'+56 9 1234 5678',
@@ -370,6 +372,20 @@ export default function Prescriptions() {
             />
           </label>
         </div>
+
+        <h3 className={s.groupTitle}>Diagnóstico</h3>
+        <div className={s.grid}>
+          <label className={s.field}>
+            <span>Diagnóstico</span>
+            <input
+              type="text"
+              value={receta.diagnostico}
+              onChange={(e) => modificarReceta('diagnostico', e.target.value)}
+              placeholder="Presenta dolor abdominal"
+            />
+          </label>
+        </div>
+
 
         <div className={s.medsHeader}>
           <h3 className={s.groupTitle}>Medicamentos</h3>
